@@ -30,6 +30,13 @@ int	main(int argc, char *argv[], char *envp[])
 		exit(1);
 	}
 
+	fd_write = open(argv[4], O_WRONLY | O_APPEND | O_CREAT, 0777);
+		if (fd_write == -1)
+		{
+			perror("Opening the file failed");
+			exit(1);
+		}
+
 	//------------------opening the pipe----------------------------
 	if (pipe(fd) == -1)
 	{
@@ -46,19 +53,24 @@ int	main(int argc, char *argv[], char *envp[])
 	}
 	if (p1 == 0) // child process
 	{
-		dup2(fd_read, 0);
-		dup2(fd[1], 1);
-		
-		//parse_command_path
+		char buffer[BUFFER_PIPEX + 1];
 
-		close(0);
-		close(1);
+		nbytes = read(fd_read, buffer, BUFFER_PIPEX + 1);
+		if (nbytes == -1)
+			exit(1);
+		// command 1
+		buffer[nbytes] = '\0';
+		ft_printf("%s\n", buffer);
+		write(fd[1], buffer, nbytes);
+
+		close(fd_read);
+		close(fd[1]);
 	}
-	// waitpid(0, NULL, 0);
-	close(0);
-	close(1);
 
+		close(fd_read);
+		close(fd[1]);
 	//------------------second fork----------------------------------
+	
 	p2 = fork();
 	if (p2 == -1)
 	{
@@ -67,22 +79,17 @@ int	main(int argc, char *argv[], char *envp[])
 	}
 	if (p2 == 0) // child process
 	{
-		fd_write = open(argv[4], O_WRONLY);
-		if (fd_write == -1)
-		{
-			perror("Opening the file failed");
-			exit(1);
-		}
-		
-		dup2(fd[0], 0);
-		dup2(fd_write, 1);
-	
-		// command 2
+		char buffer_2[BUFFER_PIPEX + 1];
 
-		close(0);
-		close(1);
+		int nbytes = read(fd[0], buffer_2, BUFFER_PIPEX + 1);
+		buffer_2[nbytes] = '\0';
+		// command 2
+		ft_printf("%s\n", buffer_2);
+		write(fd_write, buffer_2, nbytes);
+
+		close(fd[0]);
+		close(fd_write);
 	}
-	// waitpid(0, NULL, 0);
-	close(0);
+	close(fd[0]);
 	return (0);
 }

@@ -6,7 +6,7 @@
 #    By: aklimchu <aklimchu@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/24 11:18:05 by aklimchu          #+#    #+#              #
-#    Updated: 2024/08/13 15:29:20 by aklimchu         ###   ########.fr        #
+#    Updated: 2024/08/15 13:10:51 by aklimchu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@
 NAME		= pipex
 
 # Compiler
-CC 			= gcc
+CC 			= cc
 CFLAGS		= -Wall -Wextra -Werror -I $(LIBFT_DIR)
 RM			= rm -f
 
