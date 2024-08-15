@@ -6,7 +6,7 @@
 /*   By: aklimchu <aklimchu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 14:31:32 by aklimchu          #+#    #+#             */
-/*   Updated: 2024/08/13 15:30:50 by aklimchu         ###   ########.fr       */
+/*   Updated: 2024/08/15 11:36:22 by aklimchu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,6 @@
 # include <fcntl.h>
 # include <stdio.h>	//perror
 
-# define BUFFER_SIZE 1024
+# define BUFFER_PIPEX 6
 
 #endif /* PIPEX_H */
