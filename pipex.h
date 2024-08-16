@@ -6,7 +6,7 @@
 /*   By: aklimchu <aklimchu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 14:31:32 by aklimchu          #+#    #+#             */
-/*   Updated: 2024/08/15 14:53:37 by aklimchu         ###   ########.fr       */
+/*   Updated: 2024/08/16 09:31:01 by aklimchu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 # include <stdio.h>	//perror
 #include <sys/wait.h> // waitpid
 
-# define BUFFER_PIPEX 6
+char	*ft_strjoin_new(char const *s1, char const *s2, char const *s3);
+char	*check_path(char *envp[], char *command);
+char	**check_param(char *str);
 
 #endif /* PIPEX_H */
