@@ -6,7 +6,7 @@
 /*   By: aklimchu <aklimchu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 08:26:39 by aklimchu          #+#    #+#             */
-/*   Updated: 2024/08/19 14:51:41 by aklimchu         ###   ########.fr       */
+/*   Updated: 2024/08/21 14:10:19 by aklimchu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,26 +19,23 @@ int	main(int argc, char *argv[], char *envp[])
 	pid_t	p2;
 	int		fd_read;
 	int		status;
-	int copy_out = dup(1);	// delete
+	int copy_out = dup(1);	// delete?
 	
 	//--------------------checking the input-----------------------
-	if (argc > 5)
-	{
-		perror("Too many arguments\n");
-		exit(1);
-	}
-	if (argc < 5)
-	{
-		perror("Not enough arguments\n");
-		exit(1);
-	}
+	if (argc == 1)
+		exit(0);
 
 	//------------------opening the files---------------------------
 	if (access(argv[1], R_OK) == -1 && errno == EACCES)
-		ft_printf("pipex: %s: permission denied\n", argv[1]);
+		ft_printf("pipex: permission denied: %s\n", argv[1]);
 	if (access(argv[1], F_OK) == -1 && errno == ENOENT)
-		ft_printf("pipex: %s: no such file or directory\n", argv[1]);
+		ft_printf("pipex: no such file or directory: %s\n", argv[1]);
+
+	if (argc == 2)
+		exit(0);
+	
 	fd_read = open(argv[1], O_RDONLY);
+
 	/* if (fd_read == -1)
 	{
 		perror("Opening the input file failed");
@@ -59,11 +56,17 @@ int	main(int argc, char *argv[], char *envp[])
 		perror("Fork failed");
 		exit(1);
 	}
+
 	if (p1 == 0)
 		child_process_1(argv, envp, fd, fd_read, copy_out);
 	close(fd_read);
 	close(fd[1]);
+	
+	//char *inbuf;	//?
 
+	if (argc == 3)
+		exit(0);
+	
 	//------------------second fork----------------------------------
 	p2 = fork();
 	if (p2 == -1)
@@ -73,7 +76,7 @@ int	main(int argc, char *argv[], char *envp[])
 	}
 	if (p2 == 0) 
 		child_process_2(argv, envp, fd, copy_out);
-	waitpid(p1, NULL, 0);
+	//waitpid(p1, NULL, 0);	causes timeout?
 	waitpid(p2, &status, 0);
 	if (WIFEXITED(status))
 	{

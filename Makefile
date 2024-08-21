@@ -6,7 +6,7 @@
 #    By: aklimchu <aklimchu@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/24 11:18:05 by aklimchu          #+#    #+#              #
-#    Updated: 2024/08/19 15:25:05 by aklimchu         ###   ########.fr        #
+#    Updated: 2024/08/21 09:32:07 by aklimchu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,7 @@ SRC 		= main.c path.c \
 			ft_strjoin_new.c \
 			free_all.c check_errors.c \
 			child_process_1.c \
-			child_process_2.c
+			child_process_2.c printing.c
 OBJ 		= $(SRC:.c=.o)
 INCLUDE		= -I "./"
 

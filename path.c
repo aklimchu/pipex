@@ -6,7 +6,7 @@
 /*   By: aklimchu <aklimchu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 08:26:45 by aklimchu          #+#    #+#             */
-/*   Updated: 2024/08/19 15:57:32 by aklimchu         ###   ########.fr       */
+/*   Updated: 2024/08/21 15:08:50 by aklimchu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,17 +24,28 @@ static char **get_path(char *envp[]);
 
 static void	check_access(char **param, int copy_out);
 
-char	**check_param(char *str)
+char	**check_param(char *str, int copy_out)
 {
 	char	*str_new;
 	char	set[2];
 	char	**param;
 
+	if (str[0] == '\0')
+	{
+		printing(str, "permission denied: ", copy_out);
+		exit(126);
+	}
 	set[0] = '"';
 	set[1] = '\0';
 	str_new = ft_strtrim(str, set);
 	if (str_new == NULL)
 		return(NULL);
+	if (str_new[0] == ' ')
+	{
+		printing(str_new, "command not found: ", copy_out);
+		free(str_new);
+		exit(127);
+	}
 	param = ft_split(str_new, ' ');
 	free(str_new);
 	return(param);
@@ -56,6 +67,8 @@ char	*check_path(char *envp[], char **param, int copy_out)
 		check_access(param, copy_out);
 		return(command);
 	}
+	
+	//---------------getting the path to command--------------------
 	path = get_path(envp);
 	if (path == NULL)
 		return(NULL);
@@ -74,9 +87,7 @@ char	*check_path(char *envp[], char **param, int copy_out)
 	free_all(path, NULL, NULL);
 	if (full_path == NULL)
 	{
-		ft_putstr_fd("pipex: ", copy_out);
-		ft_putstr_fd(command, copy_out);
-		ft_putstr_fd(": command not found\n", copy_out);
+		printing(command, "command not found: ", copy_out);
 		free_all(NULL, param, NULL);
 		exit(127);
 	}
@@ -105,21 +116,15 @@ static void	check_access(char **param, int copy_out)
 	char	*command;
 
 	command = param[0];
-	if (access(command, X_OK) == -1 && errno == EACCES) // not working properly
+	/* if (access(command, X_OK) == -1 && errno == EACCES)
 	{
-		ft_putstr_fd("pipex: ", copy_out);
-		ft_putstr_fd(command, copy_out);
-		ft_putstr_fd(": permission denied\n", copy_out);
-		//ft_printf("pipex: %s: permission denied\n", command);
+		printing(command, "permission denied: ", copy_out);
 		free_all(param, NULL, NULL);
 		exit(126);
-	}
+	} */
 	if (access(command, F_OK) == -1 && errno == ENOENT)
 	{
-		ft_putstr_fd("pipex: ", copy_out);
-		ft_putstr_fd(command, copy_out);
-		ft_putstr_fd(": no such file or directory\n", copy_out);
-		//ft_printf("pipex: %s: no such file or directory\n", command);
+		printing(command, "no such file or directory: ", copy_out);
 		free_all(param, NULL, NULL);
 		exit(127);
 	}

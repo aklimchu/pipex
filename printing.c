@@ -1,40 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_all.c                                         :+:      :+:    :+:   */
+/*   printing.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aklimchu <aklimchu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/19 09:14:14 by aklimchu          #+#    #+#             */
-/*   Updated: 2024/08/21 09:09:13 by aklimchu         ###   ########.fr       */
+/*   Created: 2024/08/21 09:28:16 by aklimchu          #+#    #+#             */
+/*   Updated: 2024/08/21 14:11:41 by aklimchu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	free_all(char **arr_1, char **arr_2, char *str)
+void	printing(char *cmd, char *result, int fd)
 {
-	int		i;
-
-	i = 0;
-	if (arr_1)
-	{
-		while (arr_1[i])
-			free(arr_1[i++]);
-		free(arr_1);
-		arr_1 = NULL;
-	}
-	i = 0;
-	if (arr_2)
-	{
-		while (arr_2[i])
-			free(arr_2[i++]);
-		free(arr_2);
-		arr_2 = NULL;
-	}
-	if (str)
-	{
-		free(str);
-		str = NULL;
-	}
+	ft_putstr_fd("pipex: ", fd);
+	ft_putstr_fd(result, fd);
+	ft_putstr_fd(cmd, fd);
+	ft_putstr_fd("\n", fd);
 }

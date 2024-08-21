@@ -6,7 +6,7 @@
 /*   By: aklimchu <aklimchu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 12:20:07 by aklimchu          #+#    #+#             */
-/*   Updated: 2024/08/19 14:59:12 by aklimchu         ###   ########.fr       */
+/*   Updated: 2024/08/21 14:33:53 by aklimchu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	child_process_1(char **argv, char **envp, int *fd, int fd_read, int copy_ou
 	close(fd_read);
 	close(fd[1]);
 				
-	param_1 = check_param(argv[2]);
+	param_1 = check_param(argv[2], copy_out);
 	if (param_1 == NULL)
 	{
 		//close fds
@@ -41,14 +41,14 @@ void	child_process_1(char **argv, char **envp, int *fd, int fd_read, int copy_ou
 		free_all(param_1, NULL, NULL);
 		exit(1);
 	}
-	if (check_error_cmd(param_1, path_1, argv[1], 1) == 0) // cmd ?
+	if (check_error_cmd(param_1, path_1, argv[1], 1) == 0) // do we need?
 	{
 		if (execve(path_1, param_1, envp) == -1)
 		{
-			perror("Command 1 failed");
-			free_all(param_1, NULL, path_1);
+			printing(param_1[0], "permission denied: ", copy_out);
+			free_all(param_1, NULL, NULL);
 			//close fds
-			exit(1);
+			exit(126);
 		}
 	}
 	free_all(param_1, NULL, path_1);
