@@ -6,7 +6,7 @@
 /*   By: aklimchu <aklimchu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 08:26:39 by aklimchu          #+#    #+#             */
-/*   Updated: 2024/08/21 14:10:19 by aklimchu         ###   ########.fr       */
+/*   Updated: 2024/08/22 14:51:32 by aklimchu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,9 @@ int	main(int argc, char *argv[], char *envp[])
 
 	//------------------opening the files---------------------------
 	if (access(argv[1], R_OK) == -1 && errno == EACCES)
-		ft_printf("pipex: permission denied: %s\n", argv[1]);
+		ft_printf("pipex: %s: Permission denied\n", argv[1]);
 	if (access(argv[1], F_OK) == -1 && errno == ENOENT)
-		ft_printf("pipex: no such file or directory: %s\n", argv[1]);
+		ft_printf("pipex: %s: No such file or directory\n", argv[1]);
 
 	if (argc == 2)
 		exit(0);
@@ -67,6 +67,8 @@ int	main(int argc, char *argv[], char *envp[])
 	if (argc == 3)
 		exit(0);
 	
+
+	
 	//------------------second fork----------------------------------
 	p2 = fork();
 	if (p2 == -1)
@@ -76,8 +78,8 @@ int	main(int argc, char *argv[], char *envp[])
 	}
 	if (p2 == 0) 
 		child_process_2(argv, envp, fd, copy_out);
-	//waitpid(p1, NULL, 0);	causes timeout?
 	waitpid(p2, &status, 0);
+	waitpid(p1, NULL, 0);	// causes timeout?
 	if (WIFEXITED(status))
 	{
 		status = WEXITSTATUS(status);

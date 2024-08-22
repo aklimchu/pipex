@@ -28,8 +28,8 @@ char **get_path(char *envp[])
 			break ;
 		i++;
 	}
-/* 	ft_printf("%s\n", envp[i]);
- */	path = ft_split((envp[i] + 5), ':');
+ 	ft_printf("%s\n", envp[i]);
+	path = ft_split((envp[i] + 5), ':');
 	i = 0;
 	return(path);
 }
