@@ -6,7 +6,7 @@
 /*   By: aklimchu <aklimchu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 12:20:07 by aklimchu          #+#    #+#             */
-/*   Updated: 2024/08/21 14:33:53 by aklimchu         ###   ########.fr       */
+/*   Updated: 2024/08/22 10:37:02 by aklimchu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,8 @@ void	child_process_1(char **argv, char **envp, int *fd, int fd_read, int copy_ou
 	{
 		if (execve(path_1, param_1, envp) == -1)
 		{
-			printing(param_1[0], "permission denied: ", copy_out);
-			free_all(param_1, NULL, NULL);
+			printing(param_1[0], ": Permission denied\n", copy_out);
+			free_all(param_1, NULL, NULL);	// freeing path_2?
 			//close fds
 			exit(126);
 		}

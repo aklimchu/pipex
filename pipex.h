@@ -6,7 +6,7 @@
 /*   By: aklimchu <aklimchu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 14:31:32 by aklimchu          #+#    #+#             */
-/*   Updated: 2024/08/21 14:34:26 by aklimchu         ###   ########.fr       */
+/*   Updated: 2024/08/22 12:52:12 by aklimchu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,5 +28,9 @@ int		check_error_cmd(char **param, char *path, char *name, int flag);
 void	child_process_1(char **argv, char **envp, int *fd, int fd_read, int copy_out);
 int		child_process_2(char **argv, char **envp, int *fd, int copy_out);
 void	printing(char *cmd, char *result, int fd);
+void	printing_nop(char *cmd, char *result, int fd);
+int		is_directory(char *path, int copy_out);
+char	*str_filter(char *str, char *set);
+char	**ft_split_new(char const *s, char c);
 
 #endif /* PIPEX_H */

@@ -6,7 +6,7 @@
 /*   By: aklimchu <aklimchu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 12:48:04 by aklimchu          #+#    #+#             */
-/*   Updated: 2024/08/21 15:11:36 by aklimchu         ###   ########.fr       */
+/*   Updated: 2024/08/22 11:00:35 by aklimchu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,19 @@ int	child_process_2(char **argv, char **envp, int *fd, int copy_out)
 	
 /* 	write(copy_out, "Child 2\n", 8);
  */
-	if (argv[4])
+	if (argv[4][0] == '\0')
+	{
+		printing(argv[4], ": No such file or directory\n", copy_out);
+		close(fd[0]);
+		exit(1);
+	}
+	else if (argv[4])
 	{
 		fd_write = open(argv[4], O_WRONLY | O_TRUNC | O_CREAT, 0777);
 		if (fd_write == -1 && access(argv[4], W_OK) == -1 && errno == EACCES)
 		{
-			// ft_printf("pipex: %s: permission denied\n", argv[4]);
-			printing(argv[4], "permission denied: ", copy_out);
+			// ft_printf("pipex: %s: Permission denied\n", argv[4]);
+			printing(argv[4], ": Permission denied\n", copy_out);
 			close(fd[0]);
 			close(fd_write);
 			exit(1);
@@ -73,7 +79,7 @@ int	child_process_2(char **argv, char **envp, int *fd, int copy_out)
 	}
 	if (execve(path_2, param_2, envp) == -1)
 	{
-		printing(param_2[0], "permission denied: ", copy_out);
+		printing(param_2[0], ": Permission denied\n", copy_out);
 		free_all(param_2, NULL, NULL);	// freeing path_2?
 		//close fds
 		exit(126);
