@@ -6,7 +6,7 @@
 /*   By: aklimchu <aklimchu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 12:50:23 by aklimchu          #+#    #+#             */
-/*   Updated: 2024/08/22 14:22:39 by aklimchu         ###   ########.fr       */
+/*   Updated: 2024/08/23 15:31:31 by aklimchu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,22 +18,22 @@ static size_t	nextc(char const *s, char c);
 
 //static size_t	new_count(char const *s, char c);
 
-char	**ft_split_new(char const *s, char c)
+char	**ft_split_new(char const *s, char c, int str_num)
 {
 	char	**new_s;
-	size_t	i;
+	int	i;
 
-	new_s = (char **)malloc(/* new_count(s, c) */ 3 * sizeof(char *));
+	new_s = (char **)malloc((str_num + 1) * sizeof(char *));
 	if (new_s == NULL)
 		return ((void *) 0);
 	i = 0;
-	while ((*s) && i < 2)
+	while ((*s) && i < str_num)
 	{
 		if (*s == c)
 			s++;
 		else
 		{
-			if (i == 0)
+			if (i < str_num - 1)
 				new_s[i] = ft_substr(s, 0, nextc(s, c));
 			else
 				new_s[i] = ft_substr(s, 0, ft_strlen(s));
@@ -100,8 +100,9 @@ static size_t	nextc(char const *s, char c)
 {
 	char str[] = "grep str = NULL";
 
-	char **str_new = ft_split_new(str, ' ');
+	char **str_new = ft_split_new(str, ' ', 7);
 	int i = 0;
 	while (str_new[i])
 		ft_printf("%s\n", str_new[i++]);
+	return(0);
 } */

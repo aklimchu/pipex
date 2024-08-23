@@ -6,7 +6,7 @@
 /*   By: aklimchu <aklimchu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 08:26:45 by aklimchu          #+#    #+#             */
-/*   Updated: 2024/08/23 11:50:52 by aklimchu         ###   ########.fr       */
+/*   Updated: 2024/08/23 15:53:31 by aklimchu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,10 @@ static void	check_access(char **param, int copy_out);
 char	**check_param(char *str, int copy_out)
 {
 	char	*str_new;
+	//char	*str_new_2;
 	char	set[3];
 	char	**param;
+	int		str_num;
 
 	(void)copy_out;
 
@@ -43,6 +45,7 @@ char	**check_param(char *str, int copy_out)
 	str_new = str_filter(str, set);
 	if (str_new == NULL)
 		return(NULL);
+	//str_new_2 = str_filter_semi(str_new);
 	if (str_new[0] == '\0')
 	{
 		printing_nop(str, ": command not found\n", 2);
@@ -54,7 +57,11 @@ char	**check_param(char *str, int copy_out)
 		param = ft_split_awk(str_new);
 		or can we modify existing ft_split?
 	} */
-	param = ft_split_new(str_new, ' ');
+	str_num = count_param(str_new);
+	param = ft_split_new(str_new, ' ', str_num);	//ft_split?
+	int i = 0;
+	while (param[i])
+		ft_printf("%s\n", param[i++]);
 	free(str_new);
 	return(param);
 }
