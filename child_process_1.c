@@ -6,7 +6,7 @@
 /*   By: aklimchu <aklimchu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 12:20:07 by aklimchu          #+#    #+#             */
-/*   Updated: 2024/08/22 10:37:02 by aklimchu         ###   ########.fr       */
+/*   Updated: 2024/08/23 09:01:17 by aklimchu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ void	child_process_1(char **argv, char **envp, int *fd, int fd_read, int copy_ou
 	char	*path_1;
 	char	**param_1;
 	
+	(void)copy_out;
+
 	close(fd[0]);
 	
 	if (fd_read == -1)
@@ -31,13 +33,11 @@ void	child_process_1(char **argv, char **envp, int *fd, int fd_read, int copy_ou
 	param_1 = check_param(argv[2], copy_out);
 	if (param_1 == NULL)
 	{
-		//close fds
 		exit(1);
 	}
 	path_1 = check_path(envp, param_1, copy_out);
 	if (path_1 == NULL)
 	{
-		//close fds
 		free_all(param_1, NULL, NULL);
 		exit(1);
 	}
@@ -45,9 +45,8 @@ void	child_process_1(char **argv, char **envp, int *fd, int fd_read, int copy_ou
 	{
 		if (execve(path_1, param_1, envp) == -1)
 		{
-			printing(param_1[0], ": Permission denied\n", copy_out);
-			free_all(param_1, NULL, NULL);	// freeing path_2?
-			//close fds
+			printing(param_1[0], ": Permission denied\n", 2);
+			free_all(param_1, NULL, NULL);	// freeing path_1?
 			exit(126);
 		}
 	}

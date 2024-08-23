@@ -6,7 +6,7 @@
 /*   By: aklimchu <aklimchu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 08:26:39 by aklimchu          #+#    #+#             */
-/*   Updated: 2024/08/22 14:51:32 by aklimchu         ###   ########.fr       */
+/*   Updated: 2024/08/23 09:00:41 by aklimchu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,6 @@ int	main(int argc, char *argv[], char *envp[])
 	close(fd_read);
 	close(fd[1]);
 	
-	//char *inbuf;	//?
-
 	if (argc == 3)
 		exit(0);
 	
@@ -78,8 +76,12 @@ int	main(int argc, char *argv[], char *envp[])
 	}
 	if (p2 == 0) 
 		child_process_2(argv, envp, fd, copy_out);
+	
+	close(fd[0]);
+	close(fd[1]);
+	
 	waitpid(p2, &status, 0);
-	waitpid(p1, NULL, 0);	// causes timeout?
+	waitpid(p1, NULL, 0);
 	if (WIFEXITED(status))
 	{
 		status = WEXITSTATUS(status);

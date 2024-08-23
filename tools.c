@@ -6,7 +6,7 @@
 /*   By: aklimchu <aklimchu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 11:20:10 by aklimchu          #+#    #+#             */
-/*   Updated: 2024/08/22 12:40:14 by aklimchu         ###   ########.fr       */
+/*   Updated: 2024/08/23 11:42:19 by aklimchu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ int	is_directory(char *path, int copy_out)
 	char	buffer;
 	ssize_t	result;
 	
+	(void)copy_out;
+
 	fd = open(path, O_RDONLY);
 	if (fd < 0)
 		return (-1);
@@ -29,7 +31,7 @@ int	is_directory(char *path, int copy_out)
 	if (result < 0 && errno == EISDIR)
 	{
 		close(fd);
-		printing(path, ": Is a directory\n", copy_out);
+		printing(path, ": Is a directory\n", 2);
 		exit(126);
 	}
 	close(fd);
@@ -57,6 +59,7 @@ char	*str_filter(char *s1, char *set)
 		}
 	}
 	*new_s = '\0';
+	//deleting double quotes only if not in the beginning or end
 	return (new_s - newlen);
 }
 
