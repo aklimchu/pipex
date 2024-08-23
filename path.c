@@ -6,7 +6,7 @@
 /*   By: aklimchu <aklimchu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 08:26:45 by aklimchu          #+#    #+#             */
-/*   Updated: 2024/08/22 12:50:08 by aklimchu         ###   ########.fr       */
+/*   Updated: 2024/08/23 11:50:52 by aklimchu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,11 @@ char	**check_param(char *str, int copy_out)
 	char	set[3];
 	char	**param;
 
+	(void)copy_out;
+
 	if (str[0] == '\0' || str[0] == ' ')
 	{
-		printing_nop(str, ": command not found\n", copy_out);
+		printing_nop(str, ": command not found\n", 2);
 		exit(127);
 	}
 	set[0] = '"';
@@ -41,11 +43,16 @@ char	**check_param(char *str, int copy_out)
 	str_new = str_filter(str, set);
 	if (str_new == NULL)
 		return(NULL);
-/* 	if (str_new[0] == ' ')
+	if (str_new[0] == '\0')
 	{
-		printing_nop(str_new, ": command not found\n", copy_out);
+		printing_nop(str, ": command not found\n", 2);
 		free(str_new);
 		exit(127);
+	}
+	/* if (ft_strnstr(str_new, "awk", 1024))
+	{
+		param = ft_split_awk(str_new);
+		or can we modify existing ft_split?
 	} */
 	param = ft_split_new(str_new, ' ');
 	free(str_new);
@@ -59,6 +66,7 @@ char	*check_path(char *envp[], char **param, int copy_out)
 	char	**path;
 	char	*command;
 	
+	(void)copy_out;
 	command = param[0];
 	/* if (access(command, F_OK) == 0)	//what if there is no permissions to execute?
 		return(command); */
@@ -74,17 +82,16 @@ char	*check_path(char *envp[], char **param, int copy_out)
 	path = get_path(envp);
 	if (path == NULL)
 	{
-		printing(command, ": No such file or directory\n", copy_out);
+		printing(command, ": No such file or directory\n", 2);
 		free_all(param, NULL, NULL);
 		exit(127);
 	}
 	i = 0;
+	full_path = NULL;
 	while (path[i])
 	{
 		full_path = ft_strjoin_new(path[i], "/", command);
-		if (full_path == NULL)
-			break ;
-		if (access(full_path, F_OK) == 0)
+		if (full_path && access(full_path, F_OK) == 0)
 			break ;
 		free(full_path);
 		full_path = NULL;
@@ -93,7 +100,7 @@ char	*check_path(char *envp[], char **param, int copy_out)
 	free_all(path, NULL, NULL);
 	if (full_path == NULL)
 	{
-		printing_nop(command, ": command not found\n", copy_out);
+		printing_nop(command, ": command not found\n", 2);
 		free_all(NULL, param, NULL);
 		exit(127);
 	}
@@ -105,6 +112,7 @@ static char	**get_path(char *envp[])
 	int		i;
 	char	**path;
 
+	path = NULL;
 	if (envp == NULL)
 	{
 		/* path = ft_split("/home/aklimchu/bin:/usr/local/sbin:\
@@ -116,19 +124,21 @@ static char	**get_path(char *envp[])
 	i = 0;
 	while (envp[i])
 	{
-		if (ft_strncmp(envp[i], "PATH", 4) == 0)
+		if (ft_strncmp(envp[i], "PATH=", 5) == 0)
+		{
+			path = ft_split(envp[i] + 5, ':');
 			break ;
+		}
 		i++;
 	}
-	if (envp[i] == NULL)
-		return(NULL);
-	path = ft_split((envp[i] + 5), ':');
-	return(path);
+	return (path);
 }
 
 static void	check_access(char **param, int copy_out)
 {
 	char	*command;
+
+	(void)copy_out;
 
 	command = param[0];
 	/* if (access(command, X_OK) == -1 && errno == EACCES)
@@ -139,9 +149,8 @@ static void	check_access(char **param, int copy_out)
 	} */
 	if (access(command, F_OK) == -1 && errno == ENOENT)
 	{
-		printing(command, ": No such file or directory\n", copy_out);
+		printing(command, ": No such file or directory\n", 2);
 		free_all(param, NULL, NULL);
 		exit(127);
 	}
-	return ;
 }
