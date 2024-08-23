@@ -6,7 +6,7 @@
 /*   By: aklimchu <aklimchu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 14:31:32 by aklimchu          #+#    #+#             */
-/*   Updated: 2024/08/22 12:52:12 by aklimchu         ###   ########.fr       */
+/*   Updated: 2024/08/23 15:34:38 by aklimchu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ void	printing(char *cmd, char *result, int fd);
 void	printing_nop(char *cmd, char *result, int fd);
 int		is_directory(char *path, int copy_out);
 char	*str_filter(char *str, char *set);
-char	**ft_split_new(char const *s, char c);
+char	**ft_split_new(char const *s, char c, int str_num);
+int		count_param(char *str);
 
 #endif /* PIPEX_H */

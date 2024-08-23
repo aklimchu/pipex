@@ -6,7 +6,7 @@
 /*   By: aklimchu <aklimchu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 11:20:10 by aklimchu          #+#    #+#             */
-/*   Updated: 2024/08/23 11:42:19 by aklimchu         ###   ########.fr       */
+/*   Updated: 2024/08/23 13:57:14 by aklimchu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,20 +74,6 @@ static size_t	checkc(char c, char const *set)
 	return (0);
 }
 
-/* static size_t	checkstr(char const *s1, char const *set)
-{
-	size_t		i;
-
-	i = 0;
-	while (*s1)
-	{
-		if (checkc(*s1, set) == 1)
-			i++;
-		s1++;
-	}
-	return (i);
-} */
-
 static size_t	checklen(char const *s1, char const *set)
 {
 	size_t	i;
@@ -103,20 +89,15 @@ static size_t	checklen(char const *s1, char const *set)
 			i++;	
 		}
 	}
-	/* while ((*s1) && checkstr(s1, set) != ft_strlen(s1))
-	{
-		s1++;
-		i++;
-	} */
 	return (i);
 }
 
 /* int main (void)
 {
 	char set[3];
+	//set[0] = '"';
 	set[0] = 92;
-	set[1] = 42;
-	set[2] = '\0';
+	set[1] = '\0';
 	char str[6];
 	str[0] = 'g';
 	str[1] = 'r';
@@ -128,7 +109,7 @@ static size_t	checklen(char const *s1, char const *set)
 	char str2[5];
 	str2[0] = 'c';
 	str2[1] = 'a';
-	str2[2] = 42;
+	str2[2] = '"';
 	str2[3] = 92;
 	str2[4] = '\0';
 
