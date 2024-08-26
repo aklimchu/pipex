@@ -6,7 +6,7 @@
 #    By: aklimchu <aklimchu@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/24 11:18:05 by aklimchu          #+#    #+#              #
-#    Updated: 2024/08/23 15:35:47 by aklimchu         ###   ########.fr        #
+#    Updated: 2024/08/26 13:51:49 by aklimchu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,11 +25,10 @@ LIBFT_LIB	= $(LIBFT_DIR)/libft.a
 # Source / OBJ files / Includes
 SRC 		= main.c path.c \
 			ft_strjoin_new.c \
-			free_all.c check_errors.c \
+			free_all.c count_param.c \
 			child_process_1.c \
 			child_process_2.c printing.c \
-			tools.c ft_split_new.c \
-			count_param.c
+			tools.c ft_split_new.c
 OBJ 		= $(SRC:.c=.o)
 INCLUDE		= -I "./"
 

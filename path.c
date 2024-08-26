@@ -6,7 +6,7 @@
 /*   By: aklimchu <aklimchu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 08:26:45 by aklimchu          #+#    #+#             */
-/*   Updated: 2024/08/23 15:53:31 by aklimchu         ###   ########.fr       */
+/*   Updated: 2024/08/26 13:49:36 by aklimchu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,9 @@ static void	check_access(char **param, int copy_out);
 char	**check_param(char *str, int copy_out)
 {
 	char	*str_new;
-	//char	*str_new_2;
 	char	set[3];
 	char	**param;
-	int		str_num;
+	int		word_num;
 
 	(void)copy_out;
 
@@ -45,23 +44,14 @@ char	**check_param(char *str, int copy_out)
 	str_new = str_filter(str, set);
 	if (str_new == NULL)
 		return(NULL);
-	//str_new_2 = str_filter_semi(str_new);
 	if (str_new[0] == '\0')
 	{
 		printing_nop(str, ": command not found\n", 2);
 		free(str_new);
 		exit(127);
 	}
-	/* if (ft_strnstr(str_new, "awk", 1024))
-	{
-		param = ft_split_awk(str_new);
-		or can we modify existing ft_split?
-	} */
-	str_num = count_param(str_new);
-	param = ft_split_new(str_new, ' ', str_num);	//ft_split?
-	int i = 0;
-	while (param[i])
-		ft_printf("%s\n", param[i++]);
+	word_num = count_param(str_new);
+	param = ft_split_new(str_new, ' ', word_num);
 	free(str_new);
 	return(param);
 }
@@ -73,10 +63,7 @@ char	*check_path(char *envp[], char **param, int copy_out)
 	char	**path;
 	char	*command;
 	
-	(void)copy_out;
 	command = param[0];
-	/* if (access(command, F_OK) == 0)	//what if there is no permissions to execute?
-		return(command); */
 	//-----------------checking if input is directory---------------
 	if (ft_strrchr(command, '/'))
 	{

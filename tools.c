@@ -6,14 +6,14 @@
 /*   By: aklimchu <aklimchu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 11:20:10 by aklimchu          #+#    #+#             */
-/*   Updated: 2024/08/23 13:57:14 by aklimchu         ###   ########.fr       */
+/*   Updated: 2024/08/26 13:50:14 by aklimchu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
 static size_t	checkc(char c, char const *set);
-//static size_t	checkstr(char const *s1, char const *set);
+
 static size_t	checklen(char const *s1, char const *set);
 
 int	is_directory(char *path, int copy_out)
@@ -59,7 +59,6 @@ char	*str_filter(char *s1, char *set)
 		}
 	}
 	*new_s = '\0';
-	//deleting double quotes only if not in the beginning or end
 	return (new_s - newlen);
 }
 
