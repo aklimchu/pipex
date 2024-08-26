@@ -6,7 +6,7 @@
 /*   By: aklimchu <aklimchu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 12:48:04 by aklimchu          #+#    #+#             */
-/*   Updated: 2024/08/26 13:47:57 by aklimchu         ###   ########.fr       */
+/*   Updated: 2024/08/26 15:44:29 by aklimchu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	child_process_2(char **argv, char **envp, int *fd_pipe, int copy_out)
 	
 	close(fd_pipe[1]);
 	
-	if (argv[4][0] == '\0')
+	if (argv[4] && argv[4][0] == '\0')
 	{
 		printing(argv[4], ": No such file or directory\n", 2);
 		close(fd_pipe[0]);
@@ -31,6 +31,7 @@ int	child_process_2(char **argv, char **envp, int *fd_pipe, int copy_out)
 		fd_write = open(argv[4], O_WRONLY | O_TRUNC | O_CREAT, 0777);
 		if (fd_write == -1)
 		{
+			is_directory(argv[4], copy_out);
 			if (access(argv[4], W_OK) == -1 && errno == EACCES)
 				printing(argv[4], ": Permission denied\n", 2);
 			close(fd_pipe[0]);
