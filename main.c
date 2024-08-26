@@ -6,7 +6,7 @@
 /*   By: aklimchu <aklimchu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 08:26:39 by aklimchu          #+#    #+#             */
-/*   Updated: 2024/08/26 13:48:04 by aklimchu         ###   ########.fr       */
+/*   Updated: 2024/08/26 15:47:59 by aklimchu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ int	main(int argc, char *argv[], char *envp[])
 	if (argc == 1)
 		exit(0);
 
-	fd.copy_out = dup(1);
 	
 	//------------------opening the files---------------------------
 	if (access(argv[1], R_OK) == -1 && errno == EACCES)
@@ -41,6 +40,7 @@ int	main(int argc, char *argv[], char *envp[])
 		perror("Pipe failed");
 		exit(1);
 	}
+	
 
 	//------------------first fork----------------------------------
 	p1 = fork();
@@ -49,6 +49,8 @@ int	main(int argc, char *argv[], char *envp[])
 		perror("Fork failed");
 		exit(1);
 	}
+
+	fd.copy_out = dup(1);
 
 	if (p1 == 0)
 		child_process_1(argv, envp, fd.pipe, fd.read);
@@ -70,6 +72,7 @@ int	main(int argc, char *argv[], char *envp[])
 	
 	close(fd.pipe[0]);
 	close(fd.pipe[1]);
+	close(fd.copy_out);
 	
 	waitpid(p2, &fd.status, 0);
 	waitpid(p1, NULL, 0);
