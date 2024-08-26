@@ -6,7 +6,7 @@
 /*   By: aklimchu <aklimchu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 12:50:23 by aklimchu          #+#    #+#             */
-/*   Updated: 2024/08/23 15:31:31 by aklimchu         ###   ########.fr       */
+/*   Updated: 2024/08/26 13:51:12 by aklimchu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,6 @@
 static void	free_m(char **new_s, size_t i); // divide only to 2 substrings
 
 static size_t	nextc(char const *s, char c);
-
-//static size_t	new_count(char const *s, char c);
 
 char	**ft_split_new(char const *s, char c, int str_num)
 {
@@ -76,25 +74,6 @@ static size_t	nextc(char const *s, char c)
 	}
 	return (i);
 }
-
-/* static size_t	new_count(char const *s, char c)
-{
-	size_t	i;	
-
-	i = 1;
-	if (*s != c && (*s))
-	{
-		i++;
-		s++;
-	}
-	while (*s && *(s + 1))
-	{
-		if (*s == c && *(s + 1) != c)
-			i++;
-		s++;
-	}
-	return (i);
-} */
 
 /* int	main(void)
 {
