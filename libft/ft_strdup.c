@@ -6,7 +6,7 @@
 /*   By: aklimchu <aklimchu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 14:58:15 by aklimchu          #+#    #+#             */
-/*   Updated: 2024/08/16 09:37:41 by aklimchu         ###   ########.fr       */
+/*   Updated: 2024/08/27 14:05:17 by aklimchu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,6 @@ char	*ft_strdup(const char *s1)
 		arr++;
 		s1++;
 	}
-	*arr = 0;
+	*arr = '\0';
 	return (arr - slen);
 }
