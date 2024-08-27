@@ -6,7 +6,7 @@
 /*   By: aklimchu <aklimchu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 12:43:20 by aklimchu          #+#    #+#             */
-/*   Updated: 2024/07/17 10:29:55 by aklimchu         ###   ########.fr       */
+/*   Updated: 2024/08/27 14:07:56 by aklimchu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,15 +33,12 @@ int		ft_putstr(char *str, int count);
 # endif
 
 char	*get_next_line(int fd);
-size_t	ft_strlen(const char *c);
-char	*ft_strchr(const char *s, int c);
-char	*ft_substr(char const *s, unsigned int start, size_t len);
-char	*ft_strdup(const char *s1);
 char	*ft_strncat(char *dest, char *src, unsigned int nb);
 char	*add_memory(char *stash, size_t i);
 char	*trim_stash(char *s);
 char	*free_mem(char **stash, char *line);
 char	*read_file(int fd, char *stash);
+char	*ft_strchr_new(const char *s, int c);
 
 typedef struct s_list
 {

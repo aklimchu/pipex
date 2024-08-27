@@ -6,7 +6,7 @@
 /*   By: aklimchu <aklimchu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 13:21:22 by aklimchu          #+#    #+#             */
-/*   Updated: 2024/05/22 09:56:41 by aklimchu         ###   ########.fr       */
+/*   Updated: 2024/08/27 14:06:52 by aklimchu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,16 +28,16 @@ char	*get_next_line(int fd)
 	stash = read_file(fd, stash);
 	if (stash == NULL)
 		return ((void *) 0);
-	if (ft_strchr(stash, 10) == NULL)
+	if (ft_strchr_new(stash, 10) == NULL)
 	{
 		line = ft_strdup(stash);
 		free(stash);
 		stash = NULL;
 	}
-	else if (ft_strchr(stash, 10))
+	else if (ft_strchr_new(stash, 10))
 	{
 		line = ft_substr(stash, 0, ft_strlen(stash) - \
-				ft_strlen(ft_strchr(stash, 10)) + 1);
+				ft_strlen(ft_strchr_new(stash, 10)) + 1);
 		if (line == NULL)
 			return (free_mem(&stash, NULL));
 		stash = trim_stash(stash);
@@ -57,7 +57,7 @@ char	*read_file(int fd, char *stash)
 	int			bytes_read;
 
 	bytes_read = 1;
-	while (ft_strchr(stash, 10) == NULL && bytes_read)
+	while (ft_strchr_new(stash, 10) == NULL && bytes_read)
 	{
 		buffer = (char *)malloc((BUFFER_SIZE + 1) * sizeof(char));
 		if (buffer == NULL)
@@ -128,7 +128,7 @@ char	*trim_stash(char *s)
 	size_t	newlen;
 
 	slen = ft_strlen(s);
-	newlen = ft_strlen(ft_strchr(s, 10)) - 1;
+	newlen = ft_strlen(ft_strchr_new(s, 10)) - 1;
 	new_s = (char *)malloc(newlen + 1);
 	if (newlen == 0 || new_s == NULL)
 		return (free_mem(&new_s, s));
