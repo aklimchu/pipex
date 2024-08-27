@@ -6,7 +6,7 @@
 /*   By: aklimchu <aklimchu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 08:26:45 by aklimchu          #+#    #+#             */
-/*   Updated: 2024/08/26 13:49:36 by aklimchu         ###   ########.fr       */
+/*   Updated: 2024/08/27 12:33:13 by aklimchu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,16 +22,14 @@
 
 static char **get_path(char *envp[]);
 
-static void	check_access(char **param, int copy_out);
+static void	check_access(char **param);
 
-char	**check_param(char *str, int copy_out)
+char	**check_param(char *str)
 {
 	char	*str_new;
 	char	set[3];
 	char	**param;
 	int		word_num;
-
-	(void)copy_out;
 
 	if (str[0] == '\0' || str[0] == ' ')
 	{
@@ -47,7 +45,7 @@ char	**check_param(char *str, int copy_out)
 	if (str_new[0] == '\0')
 	{
 		printing_nop(str, ": command not found\n", 2);
-		free(str_new);
+		free_all(NULL, NULL, str_new);
 		exit(127);
 	}
 	word_num = count_param(str_new);
@@ -56,7 +54,7 @@ char	**check_param(char *str, int copy_out)
 	return(param);
 }
 
-char	*check_path(char *envp[], char **param, int copy_out)
+char	*check_path(char *envp[], char **param)
 {
 	int		i;
 	char	*full_path;
@@ -67,8 +65,8 @@ char	*check_path(char *envp[], char **param, int copy_out)
 	//-----------------checking if input is directory---------------
 	if (ft_strrchr(command, '/'))
 	{
-		is_directory(command, copy_out);
-		check_access(param, copy_out);
+		is_directory(command);
+		check_access(param);
 		return(command);
 	}
 	
@@ -128,17 +126,15 @@ static char	**get_path(char *envp[])
 	return (path);
 }
 
-static void	check_access(char **param, int copy_out)
+static void	check_access(char **param)
 {
 	char	*command;
-
-	(void)copy_out;
 
 	command = param[0];
 	/* if (access(command, X_OK) == -1 && errno == EACCES)
 	{
-		printing(command, "Permission denied", copy_out);
-		free_all(param, NULL, NULL);
+		printing(command, "Permission denied", 2);
+		free_all(param, NULL, NULL, copy_out);
 		exit(126);
 	} */
 	if (access(command, F_OK) == -1 && errno == ENOENT)

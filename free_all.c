@@ -6,7 +6,7 @@
 /*   By: aklimchu <aklimchu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 09:14:14 by aklimchu          #+#    #+#             */
-/*   Updated: 2024/08/21 09:09:13 by aklimchu         ###   ########.fr       */
+/*   Updated: 2024/08/27 12:27:07 by aklimchu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,4 +37,14 @@ void	free_all(char **arr_1, char **arr_2, char *str)
 		free(str);
 		str = NULL;
 	}
+}
+
+void	close_fds(int fd1, int fd2, int fd3)
+{
+	if (fd1 >= 0)
+		close(fd1);
+	if (fd2 >= 0)
+		close(fd2);
+	if (fd3 >= 0)
+		close(fd3);
 }

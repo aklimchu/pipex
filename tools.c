@@ -6,7 +6,7 @@
 /*   By: aklimchu <aklimchu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 11:20:10 by aklimchu          #+#    #+#             */
-/*   Updated: 2024/08/26 13:50:14 by aklimchu         ###   ########.fr       */
+/*   Updated: 2024/08/27 12:28:39 by aklimchu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,22 +16,20 @@ static size_t	checkc(char c, char const *set);
 
 static size_t	checklen(char const *s1, char const *set);
 
-int	is_directory(char *path, int copy_out)
+int	is_directory(char *path)
 {
 	int		fd;
 	char	buffer;
 	ssize_t	result;
 	
-	(void)copy_out;
-
 	fd = open(path, O_RDONLY);
 	if (fd < 0)
 		return (-1);
 	result = read(fd,&buffer, 1);
 	if (result < 0 && errno == EISDIR)
 	{
-		close(fd);
 		printing(path, ": Is a directory\n", 2);
+		close(fd);
 		exit(126);
 	}
 	close(fd);

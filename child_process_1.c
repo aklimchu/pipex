@@ -6,34 +6,35 @@
 /*   By: aklimchu <aklimchu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 12:20:07 by aklimchu          #+#    #+#             */
-/*   Updated: 2024/08/26 13:46:06 by aklimchu         ###   ########.fr       */
+/*   Updated: 2024/08/27 13:02:10 by aklimchu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	child_process_1(char **argv, char **envp, int *fd_pipe, int fd_read)
+void	child_process_1(char **argv, char **envp, t_fd fd)
 {
 	char	*path_1;
 	char	**param_1;
 	
-	close(fd_pipe[0]);
+	close(fd.pipe[0]);
 	
-	if (fd_read == -1)
-		exit(1);
-
-	dup2(fd_read, 0);
-	dup2(fd_pipe[1], 1);
-
-	close(fd_read);
-	close(fd_pipe[1]);
-				
-	param_1 = check_param(argv[2], 2);
-	if (param_1 == NULL)
+	if (fd.read == -1)
 	{
+		close(fd.pipe[1]);
 		exit(1);
 	}
-	path_1 = check_path(envp, param_1, 2);
+
+	dup2(fd.read, 0);
+	dup2(fd.pipe[1], 1);
+
+	close_fds(fd.read, -1, fd.pipe[1]);
+				
+	param_1 = check_param(argv[2]);
+	if (param_1 == NULL)
+		exit(1);
+		
+	path_1 = check_path(envp, param_1);
 	if (path_1 == NULL)
 	{
 		free_all(param_1, NULL, NULL);
