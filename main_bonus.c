@@ -37,6 +37,7 @@ int	main(int argc, char *argv[], char *envp[])
 	i = 0;
 	while (i == 0 || i < argc - 4)
 	{
+		//if (i > 0): dup2 fd.pipe[i - 1] to fd.in?
 		//------------------opening the pipe----------------------------
 		if (pipe(fd.pipe[i]) == -1)
 		{
