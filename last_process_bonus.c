@@ -6,13 +6,13 @@
 /*   By: aklimchu <aklimchu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 12:48:04 by aklimchu          #+#    #+#             */
-/*   Updated: 2024/08/27 13:14:33 by aklimchu         ###   ########.fr       */
+/*   Updated: 2024/08/29 10:53:57 by aklimchu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
 
-int	last_process(char **argv, char **envp, int pipe[2])
+int	last_process(char **argv, char **envp, int pipe[2], int i)
 {
 	int		fd_write;
 	char	*path_2;
@@ -20,20 +20,20 @@ int	last_process(char **argv, char **envp, int pipe[2])
 	
 	close(pipe[1]);
 	
-	if (argv[4] && argv[4][0] == '\0')
+	if (argv[i + 1] && argv[i + 1][0] == '\0')
 	{
-		printing(argv[4], ": No such file or directory\n", 2);
+		printing(argv[i + 1], ": No such file or directory\n", 2);
 		close(pipe[0]);
 		exit(1);
 	}
-	else if (argv[4])
+	else if (argv[i + 1])
 	{
-		fd_write = open(argv[4], O_WRONLY | O_TRUNC | O_CREAT, 0777);
+		fd_write = open(argv[i + 1], O_WRONLY | O_TRUNC | O_CREAT, 0777);
 		if (fd_write == -1)
 		{
-			is_directory(argv[4]);
-			if (access(argv[4], W_OK) == -1 && errno == EACCES)
-				printing(argv[4], ": Permission denied\n", 2);
+			is_directory(argv[i + 1]);
+			if (access(argv[i + 1], W_OK) == -1 && errno == EACCES)
+				printing(argv[i + 1], ": Permission denied\n", 2);
 			close(pipe[0]);
 			exit(1);
 		}
@@ -46,7 +46,7 @@ int	last_process(char **argv, char **envp, int pipe[2])
 
 	close_fds(-1, pipe[0], fd_write);
 	
-	param_2 = check_param(argv[3]);
+	param_2 = check_param(argv[i]);
 	if (param_2 == NULL)
 		exit(1);
 		

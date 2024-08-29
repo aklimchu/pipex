@@ -6,31 +6,43 @@
 /*   By: aklimchu <aklimchu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 12:20:07 by aklimchu          #+#    #+#             */
-/*   Updated: 2024/08/27 13:02:10 by aklimchu         ###   ########.fr       */
+/*   Updated: 2024/08/29 16:59:30 by aklimchu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
 
-void	child_process(char **argv, char **envp, int read, int pipe[2])
+/* static int	argv_count(char **argv)
+{
+	int	count;
+
+	count = 0;
+	while(argv[count])
+		count++;
+	ft_printf("count %d\n", count);
+	return(count - 1);
+} */
+
+void	child_process(char *argv[], char **envp, t_fd fd, int i)
 {
 	char	*path_1;
 	char	**param_1;
 	
-	close(pipe[0]);
+	close(fd.pipe[i][0]);
 	
-	if (read == -1)
+	if (fd.in == -1 && (i == 0 /* || i == argv_count(argv) - 4) */))
 	{
-		close(pipe[1]);
+		ft_printf("no file / exiting first process");
+		close(fd.pipe[i][1]);
 		exit(1);
 	}
+	if (fd.in != -1)
+		dup2(fd.in, 0);	//?????
+	dup2(fd.pipe[i][1], 1);
 
-	dup2(read, 0);
-	dup2(pipe[1], 1);
-
-	close_fds(read, -1, pipe[1]);
+	close_fds(fd.in, -1, fd.pipe[i][1]);
 				
-	param_1 = check_param(argv[2]);
+	param_1 = check_param(argv[i + 2]);
 	if (param_1 == NULL)
 		exit(1);
 		
