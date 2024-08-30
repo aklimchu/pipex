@@ -6,7 +6,7 @@
 /*   By: aklimchu <aklimchu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 12:20:07 by aklimchu          #+#    #+#             */
-/*   Updated: 2024/08/29 16:59:30 by aklimchu         ###   ########.fr       */
+/*   Updated: 2024/08/30 14:41:00 by aklimchu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,17 +30,24 @@ void	child_process(char *argv[], char **envp, t_fd fd, int i)
 	
 	close(fd.pipe[i][0]);
 	
-	if (fd.in == -1 && (i == 0 /* || i == argv_count(argv) - 4) */))
+	if (fd.in == -1 && i == 0)
 	{
-		ft_printf("no file / exiting first process");
 		close(fd.pipe[i][1]);
 		exit(1);
 	}
-	if (fd.in != -1)
-		dup2(fd.in, 0);	//?????
+	else if (fd.in != -1)
+	{
+		dup2(fd.in, 0);
+		close(fd.in);
+	}
+	else
+		dup2(fd.pipe[i - 1][0], 0);
+		
+	if (i > 0)
+		close(fd.pipe[i - 1][0]);
+	
 	dup2(fd.pipe[i][1], 1);
-
-	close_fds(fd.in, -1, fd.pipe[i][1]);
+	close(fd.pipe[i][1]);
 				
 	param_1 = check_param(argv[i + 2]);
 	if (param_1 == NULL)

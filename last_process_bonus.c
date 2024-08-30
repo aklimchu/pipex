@@ -6,7 +6,7 @@
 /*   By: aklimchu <aklimchu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 12:48:04 by aklimchu          #+#    #+#             */
-/*   Updated: 2024/08/29 10:53:57 by aklimchu         ###   ########.fr       */
+/*   Updated: 2024/08/30 14:41:21 by aklimchu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	last_process(char **argv, char **envp, int pipe[2], int i)
 	dup2(pipe[0], 0);
 	dup2(fd_write, 1);
 
-	close_fds(-1, pipe[0], fd_write);
+	close_fds(pipe[0], fd_write, -1);
 	
 	param_2 = check_param(argv[i]);
 	if (param_2 == NULL)
