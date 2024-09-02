@@ -12,20 +12,10 @@
 
 #include "../inc_bonus/pipex_bonus.h"
 
-/* static int	argv_count(char **argv)
-{
-	int	count;
-
-	count = 0;
-	while(argv[count])
-		count++;
-	ft_printf("count %d\n", count);
-	return(count - 1);
-} */
+static void	path_and_exec(char	**param_1, char **envp);
 
 void	child_process(char *argv[], char **envp, t_fd fd, int i)
 {
-	char	*path_1;
 	char	**param_1;
 	
 	close(fd.pipe[i][0]);
@@ -52,7 +42,13 @@ void	child_process(char *argv[], char **envp, t_fd fd, int i)
 	param_1 = check_param(argv[i + 2]);
 	if (param_1 == NULL)
 		exit(1);
-		
+	path_and_exec(param_1, envp);
+}
+
+static void	path_and_exec(char	**param_1, char **envp)
+{
+	char *path_1;
+	
 	path_1 = check_path(envp, param_1);
 	if (path_1 == NULL)
 	{
