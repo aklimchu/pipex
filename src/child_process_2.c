@@ -6,7 +6,7 @@
 /*   By: aklimchu <aklimchu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 12:48:04 by aklimchu          #+#    #+#             */
-/*   Updated: 2024/09/02 08:46:47 by aklimchu         ###   ########.fr       */
+/*   Updated: 2024/09/02 09:24:19 by aklimchu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,19 +16,17 @@ static int	child_process(char **argv, char **envp, t_fd fd);
 
 int	fork_2(char **argv, char **envp, t_fd *fd)
 {
-	pid_t	pid;
-	
-	pid = fork();
-	if (pid == -1)
+	fd->p2 = fork();
+	if (fd->p2 == -1)
 	{
 		perror("Fork failed");
 		close_fds(-1, (*fd).pipe[0], (*fd).pipe[1]);	// writing end already closed?
 		return(1);
 	}
-	if (pid == 0)
+	if (fd->p2 == 0)
 		child_process(argv, envp, *fd);
 	close_fds(-1, (*fd).pipe[0], (*fd).pipe[1]);	// writing end already closed?
-	waitpid(pid, &(*fd).status, 0);
+	//waitpid(pid, &(*fd).status, 0);
 	return(0);
 }
 
