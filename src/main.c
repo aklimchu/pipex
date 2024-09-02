@@ -6,7 +6,7 @@
 /*   By: aklimchu <aklimchu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 08:26:39 by aklimchu          #+#    #+#             */
-/*   Updated: 2024/09/02 08:43:43 by aklimchu         ###   ########.fr       */
+/*   Updated: 2024/09/02 09:24:47 by aklimchu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@ static void	check_file_access(char *str);
 
 int	main(int argc, char *argv[], char *envp[])
 {
-	//pid_t	p1;
-	//pid_t	p2;
 	t_fd	fd;
 
 	if (argc == 1)	// first arg
@@ -31,15 +29,14 @@ int	main(int argc, char *argv[], char *envp[])
 		perror("Pipe failed");
 		return(close(fd.read));
 	}
-	if (fork_1(argv, envp, fd) == 1)
+	if (fork_1(argv, envp, &fd) == 1)
 		return(1);
 	if (argc == 3)	//third arg
 		return(close(fd.pipe[0]));
 	if (fork_2(argv, envp, &fd) == 1)
 		return(1);
-	
-	//waitpid(p2, &fd.status, 0);
-	//waitpid(p1, NULL, 0);
+	waitpid(fd.p2, &fd.status, 0);
+	waitpid(fd.p1, NULL, 0);
 	if (WIFEXITED(fd.status))
 		return (WEXITSTATUS(fd.status));
 	return (0);
