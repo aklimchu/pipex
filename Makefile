@@ -6,7 +6,7 @@
 #    By: aklimchu <aklimchu@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/24 11:18:05 by aklimchu          #+#    #+#              #
-#    Updated: 2024/08/30 15:04:30 by aklimchu         ###   ########.fr        #
+#    Updated: 2024/09/02 08:11:17 by aklimchu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,8 +15,8 @@ NAME		= pipex
 NAME_B		= pipex_bonus
 
 # Compiler
-CC 			= gcc
-CFLAGS		= -ggdb3 -Wall -Wextra -Werror -I $(LIBFT_DIR)
+CC 			= cc
+CFLAGS		= -Wall -Wextra -Werror -I $(LIBFT_DIR)
 RM			= rm -f
 
 # Libft
@@ -24,28 +24,26 @@ LIBFT_DIR	= libft
 LIBFT_LIB	= $(LIBFT_DIR)/libft.a
 
 # Source / OBJ files / Includes
-SRC 		= main.c path.c \
-			ft_strjoin_new.c \
-			free_all.c count_param.c \
-			child_process_1.c \
-			child_process_2.c printing.c \
-			tools.c ft_split_new.c
+SRC 		= ./src/main.c ./src/path.c \
+			./src/ft_strjoin_new.c \
+			./src/free_all.c ./src/count_param.c \
+			./src/child_process_1.c \
+			./src/child_process_2.c ./src/printing.c \
+			./src/tools.c ./src/ft_split_new.c
 OBJ 		= $(SRC:.c=.o)
-INCLUDE		= -I "./"
-# need to correct the header path
-
+INCLUDE		= -I "./inc"
 
 # Source / OBJ files / Includes for bonus
-SRC_B 		= main_bonus.c path.c \
-			ft_strjoin_new.c \
-			free_all_bonus.c count_param.c \
-			child_process_bonus.c \
-			last_process_bonus.c printing.c \
-			tools.c ft_split_new.c
+SRC_B 		= ./src_bonus/main_bonus.c ./src_bonus/path.c \
+			./src_bonus/ft_strjoin_new.c \
+			./src_bonus/free_all_bonus.c \
+			./src_bonus/count_param.c \
+			./src_bonus/child_process_bonus.c \
+			./src_bonus/last_process_bonus.c \
+			./src_bonus/printing.c \
+			./src_bonus/tools.c ./src_bonus/ft_split_new.c
 OBJ_B 		= $(SRC_B:.c=.o)
-INCLUDE_B	= -I "./"
-# need to correct the header path
-# do we need to set all files to _bonus?
+INCLUDE_B	= -I "./inc_bonus"
 
 # Rules
 all:		$(NAME)
