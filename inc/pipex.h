@@ -43,5 +43,6 @@ char	*str_filter(char *str, char *set);
 char	**ft_split_new(char const *s, char c, int str_num);
 int		count_param(char *str);
 void	close_fds(int fd1, int fd2, int fd3);
+void	check_command_access(char **param);
 
 #endif /* PIPEX_H */

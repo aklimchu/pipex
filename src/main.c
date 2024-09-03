@@ -18,25 +18,25 @@ int	main(int argc, char *argv[], char *envp[])
 {
 	t_fd	fd;
 
-	if (argc == 1)	// first arg
-		return(1);
+	if (argc == 1) // first arg
+		return (1);
 	check_file_access(argv[1]);
-	if (argc == 2)	//second arg
-		return(1);
-	fd.read = open(argv[1], O_RDONLY);	//reading the file
-	if (pipe(fd.pipe) == -1)	// opening the pipe
+	if (argc == 2) //second arg
+		return (1);
+	fd.read = open(argv[1], O_RDONLY); //reading the file
+	if (pipe(fd.pipe) == -1) // opening the pipe
 	{
 		perror("Pipe failed");
-		return(close(fd.read));
+		return (close(fd.read));
 	}
 	if (fork_1(argv, envp, &fd) == 1)
-		return(1);
-	if (argc == 3)	//third arg
-		return(close(fd.pipe[0]));
+		return (1);
+	if (argc == 3) //third arg
+		return (close(fd.pipe[0]));
 	if (fork_2(argv, envp, &fd) == 1)
-		return(1);
-	waitpid(fd.p2, &fd.status, 0);
+		return (1);
 	waitpid(fd.p1, NULL, 0);
+	waitpid(fd.p2, &fd.status, 0);
 	if (WIFEXITED(fd.status))
 		return (WEXITSTATUS(fd.status));
 	return (0);

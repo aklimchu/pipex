@@ -12,6 +12,8 @@
 
 #include "../inc_bonus/pipex_bonus.h"
 
+static int	open_dest_file(char *str, int pipe[2]);
+
 int	last_process(char **argv, char **envp, int pipe[2], int i)
 {
 	int		fd_write;
@@ -20,26 +22,7 @@ int	last_process(char **argv, char **envp, int pipe[2], int i)
 	
 	close(pipe[1]);
 	
-	if (argv[i + 1] && argv[i + 1][0] == '\0')
-	{
-		printing(argv[i + 1], ": No such file or directory\n", 2);
-		close(pipe[0]);
-		exit(1);
-	}
-	else if (argv[i + 1])
-	{
-		fd_write = open(argv[i + 1], O_WRONLY | O_TRUNC | O_CREAT, 0777);
-		if (fd_write == -1)
-		{
-			is_directory(argv[i + 1]);
-			if (access(argv[i + 1], W_OK) == -1 && errno == EACCES)
-				printing(argv[i + 1], ": Permission denied\n", 2);
-			close(pipe[0]);
-			exit(1);
-		}
-	}
-	else
-		fd_write = open("/dev/stdout", O_WRONLY);
+	fd_write = open_dest_file(argv[i + 1], pipe);
 	
 	dup2(pipe[0], 0);
 	dup2(fd_write, 1);
@@ -64,4 +47,31 @@ int	last_process(char **argv, char **envp, int pipe[2], int i)
 	}
 	free_all(NULL, param_2, path_2);
 	exit(0);
+}
+
+static int	open_dest_file(char *str, int pipe[2])
+{
+	int		fd_write;
+	
+	if (str && str[0] == '\0')
+	{
+		printing(str, ": No such file or directory\n", 2);
+		close(pipe[0]);
+		exit(1);
+	}
+	else if (str)
+	{
+		fd_write = open(str, O_WRONLY | O_TRUNC | O_CREAT, 0777);
+		if (fd_write == -1)
+		{
+			is_directory(str);
+			if (access(str, W_OK) == -1 && errno == EACCES)
+				printing(str, ": Permission denied\n", 2);
+			close(pipe[0]);
+			exit(1);
+		}
+	}
+	else
+		fd_write = open("/dev/stdout", O_WRONLY);
+	return (fd_write);
 }
