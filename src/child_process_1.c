@@ -6,7 +6,7 @@
 /*   By: aklimchu <aklimchu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 12:20:07 by aklimchu          #+#    #+#             */
-/*   Updated: 2024/09/02 09:32:33 by aklimchu         ###   ########.fr       */
+/*   Updated: 2024/09/02 09:37:23 by aklimchu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@ int	fork_1(char **argv, char **envp, t_fd *fd)
 static void	child_process(char **argv, char **envp, t_fd fd)
 {
 	char	**param_1;
+	
+	//modified
 	
 	close(fd.pipe[0]);
 	if (fd.read == -1)
