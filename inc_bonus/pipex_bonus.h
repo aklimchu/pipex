@@ -6,12 +6,12 @@
 /*   By: aklimchu <aklimchu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 14:31:32 by aklimchu          #+#    #+#             */
-/*   Updated: 2024/09/02 08:09:43 by aklimchu         ###   ########.fr       */
+/*   Updated: 2024/09/03 14:09:35 by aklimchu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
-# define PIPEX_H
+#ifndef PIPEX_BONUS_H
+# define PIPEX_BONUS_H
 
 # include "../libft/libft.h"
 # include <sys/types.h>
@@ -26,6 +26,7 @@ typedef struct s_fd
 	int		in;
 	int		out;
 	int		status;
+	pid_t	*pid;
 }				t_fd;
 
 char	*ft_strjoin_new(char const *s1, char const *s2, char const *s3);
@@ -33,7 +34,7 @@ char	*check_path(char *envp[], char **param);
 char	**check_param(char *str);
 void	free_all(char **arr_1, char **arr_2, char *str);
 void	child_process(char *argv[], char **envp, t_fd fd, int i);
-int		last_process(char **argv, char **envp, int pipe[2], int i);
+void	last_process(char **argv, char **envp, int pipe[2], int i);
 void	printing(char *cmd, char *result, int fd);
 void	printing_nop(char *cmd, char *result, int fd);
 int		is_directory(char *path);
@@ -41,5 +42,8 @@ char	*str_filter(char *str, char *set);
 char	**ft_split_new(char const *s, char c, int str_num);
 int		count_param(char *str);
 void	close_fds(int fd1, int fd2, int fd3);
+int		pipe_and_fork(t_fd *fd, char *argv[], char *envp[], int i);
+int		last_fork(t_fd *fd, char *argv[], char *envp[], int i);
+int		free_pid(pid_t **pid);
 
-#endif /* PIPEX_H */
+#endif /* PIPEX_BONUS_H */

@@ -6,7 +6,7 @@
 /*   By: aklimchu <aklimchu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 11:20:10 by aklimchu          #+#    #+#             */
-/*   Updated: 2024/09/02 08:08:24 by aklimchu         ###   ########.fr       */
+/*   Updated: 2024/09/03 13:28:13 by aklimchu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,16 @@
 static size_t	checkc(char c, char const *set);
 
 static size_t	checklen(char const *s1, char const *set);
+
+int	free_pid(pid_t **pid)
+{
+	if (*pid)
+	{
+		free(*pid);
+		*pid = NULL;
+	}
+	return (1);
+}
 
 int	is_directory(char *path)
 {

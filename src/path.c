@@ -6,7 +6,7 @@
 /*   By: aklimchu <aklimchu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 08:26:45 by aklimchu          #+#    #+#             */
-/*   Updated: 2024/09/02 08:08:18 by aklimchu         ###   ########.fr       */
+/*   Updated: 2024/09/03 10:25:07 by aklimchu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ char	**check_param(char *str)
 		exit(127);
 	}
 	set[0] = '"';
-	set[1] = 92;
+	set[1] = '\\';
 	set[2] = '\0';
 	str_new = str_filter(str, set);
 	if (str_new == NULL)

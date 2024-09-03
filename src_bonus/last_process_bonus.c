@@ -6,7 +6,7 @@
 /*   By: aklimchu <aklimchu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 12:48:04 by aklimchu          #+#    #+#             */
-/*   Updated: 2024/09/02 08:08:53 by aklimchu         ###   ########.fr       */
+/*   Updated: 2024/09/03 14:27:16 by aklimchu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,24 @@
 
 static int	open_dest_file(char *str, int pipe[2]);
 
-int	last_process(char **argv, char **envp, int pipe[2], int i)
+int last_fork(t_fd *fd, char *argv[], char *envp[], int i)
+{
+	(*fd).pid[i] = fork();
+	if ((*fd).pid[i] == -1)
+	{
+		perror("Fork failed");
+		free((*fd).pid);
+		(*fd).pid = NULL;
+		return (1);
+	}
+	if ((*fd).pid[i] == 0)
+		last_process(argv, envp, (*fd).pipe[i - 1], i + 2);
+	close((*fd).pipe[i - 1][0]);
+	//write end of pipe already closed?
+	return (0);
+}
+
+void	last_process(char **argv, char **envp, int pipe[2], int i)
 {
 	int		fd_write;
 	char	*path_2;
@@ -24,8 +41,13 @@ int	last_process(char **argv, char **envp, int pipe[2], int i)
 	
 	fd_write = open_dest_file(argv[i + 1], pipe);
 	
-	dup2(pipe[0], 0);
-	dup2(fd_write, 1);
+	if (dup2(pipe[0], 0) == -1 ||\
+		dup2(fd_write, 1) == -1)
+	{
+		close_fds(pipe[0], fd_write, -1);
+		perror("dup() error");
+		exit(1);
+	}
 
 	close_fds(pipe[0], fd_write, -1);
 	
@@ -45,8 +67,8 @@ int	last_process(char **argv, char **envp, int pipe[2], int i)
 		free_all(param_2, NULL, NULL);	// freeing path_2?
 		exit(126);
 	}
-	free_all(NULL, param_2, path_2);
-	exit(0);
+	/* free_all(NULL, param_2, path_2);
+	exit(0); */
 }
 
 static int	open_dest_file(char *str, int pipe[2])
@@ -59,7 +81,7 @@ static int	open_dest_file(char *str, int pipe[2])
 		close(pipe[0]);
 		exit(1);
 	}
-	else if (str)
+	else /* if (str) */
 	{
 		fd_write = open(str, O_WRONLY | O_TRUNC | O_CREAT, 0777);
 		if (fd_write == -1)
@@ -71,7 +93,7 @@ static int	open_dest_file(char *str, int pipe[2])
 			exit(1);
 		}
 	}
-	else
-		fd_write = open("/dev/stdout", O_WRONLY);
+/* 	else
+		fd_write = open("/dev/stdout", O_WRONLY); */
 	return (fd_write);
 }
