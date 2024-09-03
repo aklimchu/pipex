@@ -1,50 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_all.c                                         :+:      :+:    :+:   */
+/*   ft_strjoin_new_bonus.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aklimchu <aklimchu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/19 09:14:14 by aklimchu          #+#    #+#             */
-/*   Updated: 2024/09/02 08:08:07 by aklimchu         ###   ########.fr       */
+/*   Created: 2024/08/16 08:26:53 by aklimchu          #+#    #+#             */
+/*   Updated: 2024/09/02 08:08:12 by aklimchu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/pipex.h"
 
-void	free_all(char **arr_1, char **arr_2, char *str)
+char	*ft_strjoin_new(char const *s1, char const *s2, char const *s3)
 {
-	int		i;
+	char	*new_s;
+	size_t	totallen;
 
-	i = 0;
-	if (arr_1)
-	{
-		while (arr_1[i])
-			free(arr_1[i++]);
-		free(arr_1);
-		arr_1 = NULL;
-	}
-	i = 0;
-	if (arr_2)
-	{
-		while (arr_2[i])
-			free(arr_2[i++]);
-		free(arr_2);
-		arr_2 = NULL;
-	}
-	if (str)
-	{
-		free(str);
-		str = NULL;
-	}
-}
-
-void	close_fds(int fd1, int fd2, int fd3)
-{
-	if (fd1 >= 0)
-		close(fd1);
-	if (fd2 >= 0)
-		close(fd2);
-	if (fd3 >= 0)
-		close(fd3);
+	totallen = ft_strlen(s1) + ft_strlen(s2) + ft_strlen(s3);
+	new_s = (char *)malloc((totallen + 1) * sizeof(char));
+	if (new_s == NULL)
+		return ((void *)0);
+	while (*s1)
+		*(new_s++) = *(s1++);
+	while (*s2)
+		*(new_s++) = *(s2++);
+	while (*s3)
+		*(new_s++) = *(s3++);
+	*new_s = '\0';
+	return (new_s - totallen);
 }
