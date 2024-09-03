@@ -6,7 +6,7 @@
 /*   By: aklimchu <aklimchu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 08:26:39 by aklimchu          #+#    #+#             */
-/*   Updated: 2024/09/02 09:24:47 by aklimchu         ###   ########.fr       */
+/*   Updated: 2024/09/03 13:24:08 by aklimchu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,19 @@
 
 static void	check_file_access(char *str);
 
+static int	waiting_for_pids(t_fd *fd);
+
 int	main(int argc, char *argv[], char *envp[])
 {
 	t_fd	fd;
 
-	if (argc == 1) // first arg
+	if (argc < 5)
+	{
+		ft_putstr_fd("Not enough arguments. Correct input format: ", 2);
+		ft_putstr_fd("./pipex file1 cmd1 cmd2 file2\n", 2);
 		return (1);
+	}
 	check_file_access(argv[1]);
-	if (argc == 2) //second arg
-		return (1);
 	fd.read = open(argv[1], O_RDONLY); //reading the file
 	if (pipe(fd.pipe) == -1) // opening the pipe
 	{
@@ -31,12 +35,10 @@ int	main(int argc, char *argv[], char *envp[])
 	}
 	if (fork_1(argv, envp, &fd) == 1)
 		return (1);
-	if (argc == 3) //third arg
-		return (close(fd.pipe[0]));
 	if (fork_2(argv, envp, &fd) == 1)
 		return (1);
-	waitpid(fd.p1, NULL, 0);
-	waitpid(fd.p2, &fd.status, 0);
+	if (waiting_for_pids(&fd) == 1)
+		return (1);
 	if (WIFEXITED(fd.status))
 		return (WEXITSTATUS(fd.status));
 	return (0);
@@ -45,7 +47,22 @@ int	main(int argc, char *argv[], char *envp[])
 static void	check_file_access(char *str)
 {
 	if (access(str, R_OK) == -1 && errno == EACCES)
-		ft_printf("pipex: %s: Permission denied\n", str);
+		printing(str, ": Permission denied\n", 2);
 	if (access(str, F_OK) == -1 && errno == ENOENT)
-		ft_printf("pipex: %s: No such file or directory\n", str);
+		printing(str, ": No such file or directory\n", 2);
+}
+
+static int	waiting_for_pids(t_fd *fd)
+{
+	if (waitpid((*fd).p2, &(*fd).status, 0) == -1)
+	{
+		perror("wait() error");
+		return (1);
+	}
+	if (waitpid((*fd).p1, NULL, 0) == -1)
+	{
+		perror("wait() error");
+		return (1);
+	}
+	return (0);
 }
