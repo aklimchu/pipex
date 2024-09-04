@@ -6,7 +6,7 @@
 #    By: aklimchu <aklimchu@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/24 11:18:05 by aklimchu          #+#    #+#              #
-#    Updated: 2024/09/02 08:11:17 by aklimchu         ###   ########.fr        #
+#    Updated: 2024/09/04 15:40:01 by aklimchu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,8 +14,8 @@
 NAME		= pipex
 
 # Compiler
-CC 			= cc
-CFLAGS		= -Wall -Wextra -Werror -I $(LIBFT_DIR)
+CC 			= gcc
+CFLAGS		= -ggdb3 -Wall -Wextra -Werror -I $(LIBFT_DIR)
 RM			= rm -f
 
 # Libft
@@ -38,7 +38,8 @@ SRC_B 		= ./src_bonus/main_bonus.c ./src_bonus/path_bonus.c \
 			./src_bonus/child_process_bonus.c \
 			./src_bonus/last_process_bonus.c \
 			./src_bonus/printing_bonus.c \
-			./src_bonus/tools_bonus.c ./src_bonus/ft_split_new_bonus.c
+			./src_bonus/tools_bonus.c ./src_bonus/ft_split_new_bonus.c \
+			./src_bonus/here_doc.c ./src_bonus/here_doc_tools.c
 OBJ_B 		= $(SRC_B:.c=.o)
 INCLUDE_B	= -I "./inc_bonus"
 

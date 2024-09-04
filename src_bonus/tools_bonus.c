@@ -6,11 +6,11 @@
 /*   By: aklimchu <aklimchu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 11:20:10 by aklimchu          #+#    #+#             */
-/*   Updated: 2024/09/03 13:28:13 by aklimchu         ###   ########.fr       */
+/*   Updated: 2024/09/04 11:10:42 by aklimchu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/pipex.h"
+#include "../inc_bonus/pipex_bonus.h"
 
 static size_t	checkc(char c, char const *set);
 
@@ -26,23 +26,24 @@ int	free_pid(pid_t **pid)
 	return (1);
 }
 
-int	is_directory(char *path)
+int	is_directory(char *path, t_fd fd, int fd_pipe, char **param)
 {
-	int		fd;
+	int		test_fd;
 	char	buffer;
 	ssize_t	result;
 
-	fd = open(path, O_RDONLY);
-	if (fd < 0)
+	test_fd = open(path, O_RDONLY);
+	if (test_fd < 0)
 		return (-1);
-	result = read(fd, &buffer, 1);
+	result = read(test_fd, &buffer, 1);
 	if (result < 0 && errno == EISDIR)
 	{
 		printing(path, ": Is a directory\n", 2);
-		close(fd);
+		close_free(test_fd, fd_pipe, -1, &fd.pid);
+		free_all(param, NULL, NULL, &fd.null);
 		exit(126);
 	}
-	close(fd);
+	close(test_fd);
 	return (0);
 }
 

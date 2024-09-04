@@ -6,7 +6,7 @@
 /*   By: aklimchu <aklimchu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 12:48:04 by aklimchu          #+#    #+#             */
-/*   Updated: 2024/09/03 13:25:30 by aklimchu         ###   ########.fr       */
+/*   Updated: 2024/09/04 11:40:58 by aklimchu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,20 +64,18 @@ static int	open_dest_file(char *str, int pipe[2])
 		close(pipe[0]);
 		exit(1);
 	}
-	else /* if (str) */
+	else
 	{
 		fd_write = open(str, O_WRONLY | O_TRUNC | O_CREAT, 0777);
 		if (fd_write == -1)
 		{
-			is_directory(str);
+			is_directory(str, pipe[0], NULL);
 			if (access(str, W_OK) == -1 && errno == EACCES)
 				printing(str, ": Permission denied\n", 2);
 			close(pipe[0]);
 			exit(1);
 		}
 	}
-	/* else
-		fd_write = open("/dev/stdout", O_WRONLY); */
 	return (fd_write);
 }
 
