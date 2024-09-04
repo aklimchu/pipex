@@ -6,94 +6,99 @@
 /*   By: aklimchu <aklimchu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 12:48:04 by aklimchu          #+#    #+#             */
-/*   Updated: 2024/09/03 14:27:16 by aklimchu         ###   ########.fr       */
+/*   Updated: 2024/09/04 11:13:13 by aklimchu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc_bonus/pipex_bonus.h"
 
-static int	open_dest_file(char *str, int pipe[2]);
+static void	dup_tools(int pipe[2], t_fd fd);
 
-int last_fork(t_fd *fd, char *argv[], char *envp[], int i)
+static int	open_dest_file(char *str, int pipe[2], t_fd fd);
+
+int	last_fork(t_fd *fd, char *argv[], char *envp[], int i)
 {
 	(*fd).pid[i] = fork();
 	if ((*fd).pid[i] == -1)
 	{
 		perror("Fork failed");
-		free((*fd).pid);
-		(*fd).pid = NULL;
+		/* free((*fd).pid);
+		(*fd).pid = NULL; */
+		free_pid(&(*fd).pid);
 		return (1);
 	}
 	if ((*fd).pid[i] == 0)
-		last_process(argv, envp, (*fd).pipe[i - 1], i + 2);
-	close((*fd).pipe[i - 1][0]);
-	//write end of pipe already closed?
+		last_process(argv, envp, *fd /* (*fd).pipe[i - 1] */, i + 2);
+	close((*fd).pipe[i - 1][0]); //write end of pipe already closed?
 	return (0);
 }
 
-void	last_process(char **argv, char **envp, int pipe[2], int i)
+void	last_process(char **argv, char **envp, t_fd fd, int i)
 {
-	int		fd_write;
+	//int		fd_write;
 	char	*path_2;
 	char	**param_2;
-	
-	close(pipe[1]);
-	
-	fd_write = open_dest_file(argv[i + 1], pipe);
-	
-	if (dup2(pipe[0], 0) == -1 ||\
-		dup2(fd_write, 1) == -1)
+
+	close(fd.pipe[i - 3][1]);
+	fd.out = open_dest_file(argv[i + 1], fd.pipe[i - 3], fd);
+	dup_tools(fd.pipe[i - 3], fd);
+	close_free(fd.pipe[i - 3][0], fd.out, -1, &fd.null); // do we need to free fd.pid?
+	param_2 = check_param(argv[i], fd);
+	if (param_2 == NULL)
 	{
-		close_fds(pipe[0], fd_write, -1);
-		perror("dup() error");
+		free_pid(&fd.pid);
 		exit(1);
 	}
-
-	close_fds(pipe[0], fd_write, -1);
-	
-	param_2 = check_param(argv[i]);
-	if (param_2 == NULL)
-		exit(1);
-		
-	path_2 = check_path(envp, param_2);
-	if (path_2 == NULL)
+	path_2 = check_path(envp, param_2, fd);
+	if (path_2 == NULL) // free pid?
 	{
-		free_all(param_2, NULL, NULL);
+		free_all(param_2, NULL, NULL, &fd.pid);
 		exit(1);
 	}
 	if (execve(path_2, param_2, envp) == -1)
 	{
 		printing(param_2[0], ": Permission denied\n", 2);
-		free_all(param_2, NULL, NULL);	// freeing path_2?
+		free_all(param_2, NULL, NULL, &fd.pid); // freeing path_2?
 		exit(126);
 	}
 	/* free_all(NULL, param_2, path_2);
 	exit(0); */
 }
 
-static int	open_dest_file(char *str, int pipe[2])
+static void	dup_tools(int pipe[2], t_fd fd)
+{
+	if (dup2(pipe[0], 0) == -1 || \
+		dup2(fd.out, 1) == -1)
+	{
+		close_free(pipe[0], fd.out, -1, &fd.pid);
+		perror("dup() error");
+		exit(1);
+	}
+}
+
+static int	open_dest_file(char *str, int pipe[2], t_fd fd)
 {
 	int		fd_write;
-	
+
 	if (str && str[0] == '\0')
 	{
 		printing(str, ": No such file or directory\n", 2);
-		close(pipe[0]);
+		close_free(pipe[0], -1, -1, &fd.pid);
 		exit(1);
 	}
-	else /* if (str) */
+	else
 	{
 		fd_write = open(str, O_WRONLY | O_TRUNC | O_CREAT, 0777);
 		if (fd_write == -1)
 		{
-			is_directory(str);
+			is_directory(str, fd, pipe[0], NULL);
 			if (access(str, W_OK) == -1 && errno == EACCES)
 				printing(str, ": Permission denied\n", 2);
-			close(pipe[0]);
+			close_free(pipe[0], -1, -1, &fd.pid);
 			exit(1);
 		}
 	}
-/* 	else
-		fd_write = open("/dev/stdout", O_WRONLY); */
 	return (fd_write);
 }
+
+// make same is_directory corrections in mandatory part

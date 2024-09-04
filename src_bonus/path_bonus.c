@@ -6,19 +6,19 @@
 /*   By: aklimchu <aklimchu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 08:26:45 by aklimchu          #+#    #+#             */
-/*   Updated: 2024/09/02 08:08:18 by aklimchu         ###   ########.fr       */
+/*   Updated: 2024/09/04 11:09:32 by aklimchu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/pipex.h"
+#include "../inc_bonus/pipex_bonus.h"
 
 static char	**get_path(char *envp[]);
 
-static void	str_new_print(char *str, char *str_new);
+static void	str_new_print(char *str, char *str_new, t_fd fd);
 
-static char	*get_full_path(char **path, char *command, char **param);
+static char	*get_full_path(char **path, char *command, char **param, t_fd fd);
 
-char	**check_param(char *str)
+char	**check_param(char *str, t_fd fd)
 {
 	char	*str_new;
 	char	set[3];
@@ -28,6 +28,7 @@ char	**check_param(char *str)
 	if (str[0] == '\0' || str[0] == ' ')
 	{
 		printing_nop(str, ": command not found\n", 2);
+		free_pid(&fd.pid);
 		exit(127);
 	}
 	set[0] = '"';
@@ -37,14 +38,14 @@ char	**check_param(char *str)
 	if (str_new == NULL)
 		return (NULL);
 	if (str_new[0] == '\0')
-		str_new_print(str, str_new);
+		str_new_print(str, str_new, fd);
 	word_num = count_param(str_new);
 	param = ft_split_new(str_new, ' ', word_num);
 	free(str_new);
 	return (param);
 }
 
-char	*check_path(char *envp[], char **param)
+char	*check_path(char *envp[], char **param, t_fd fd)
 {
 	char	*full_path;
 	char	**path;
@@ -53,18 +54,18 @@ char	*check_path(char *envp[], char **param)
 	command = param[0];
 	if (ft_strrchr(command, '/')) // checking if input is a directory
 	{
-		is_directory(command);
-		check_command_access(param);
+		is_directory(command, fd, -1, param);
+		check_command_access(param, fd);
 		return (command);
 	}
 	path = get_path(envp); // getting path to the command
 	if (path == NULL)
 	{
 		printing(command, ": No such file or directory\n", 2);
-		free_all(param, NULL, NULL);
+		free_all(param, NULL, NULL, &fd.pid);
 		exit(127);
 	}
-	full_path = get_full_path(path, command, param);
+	full_path = get_full_path(path, command, param, fd);
 	return (full_path);
 }
 
@@ -89,14 +90,14 @@ static char	**get_path(char *envp[])
 	return (path);
 }
 
-static void	str_new_print(char *str, char *str_new)
+static void	str_new_print(char *str, char *str_new, t_fd fd)
 {
 	printing_nop(str, ": command not found\n", 2);
-	free_all(NULL, NULL, str_new);
+	free_all(NULL, NULL, str_new, &fd.pid);
 	exit(127);
 }
 
-static char	*get_full_path(char **path, char *command, char **param)
+static char	*get_full_path(char **path, char *command, char **param, t_fd fd)
 {
 	char	*full_path;
 	int		i;
@@ -112,11 +113,11 @@ static char	*get_full_path(char **path, char *command, char **param)
 		full_path = NULL;
 		i++;
 	}
-	free_all(path, NULL, NULL);
+	free_all(path, NULL, NULL, &fd.null);
 	if (full_path == NULL)
 	{
 		printing_nop(command, ": command not found\n", 2);
-		free_all(NULL, param, NULL);
+		free_all(NULL, param, NULL, &fd.pid);
 		exit(127);
 	}
 	return (full_path);

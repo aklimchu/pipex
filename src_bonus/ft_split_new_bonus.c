@@ -6,11 +6,11 @@
 /*   By: aklimchu <aklimchu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 12:50:23 by aklimchu          #+#    #+#             */
-/*   Updated: 2024/09/02 08:08:10 by aklimchu         ###   ########.fr       */
+/*   Updated: 2024/09/04 08:24:16 by aklimchu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/pipex.h"
+#include "../inc_bonus/pipex_bonus.h"
 
 static char		**free_m(char **new_s, size_t i);
 

@@ -6,7 +6,7 @@
 /*   By: aklimchu <aklimchu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 14:31:32 by aklimchu          #+#    #+#             */
-/*   Updated: 2024/09/02 09:22:27 by aklimchu         ###   ########.fr       */
+/*   Updated: 2024/09/04 11:38:12 by aklimchu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int		fork_1(char **argv, char **envp, t_fd *fd);
 int		fork_2(char **argv, char **envp, t_fd *fd);
 void	printing(char *cmd, char *result, int fd);
 void	printing_nop(char *cmd, char *result, int fd);
-int		is_directory(char *path);
+int		is_directory(char *path, int fd_pipe, char **param);
 char	*str_filter(char *str, char *set);
 char	**ft_split_new(char const *s, char c, int str_num);
 int		count_param(char *str);

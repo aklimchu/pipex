@@ -6,7 +6,7 @@
 /*   By: aklimchu <aklimchu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 08:26:45 by aklimchu          #+#    #+#             */
-/*   Updated: 2024/09/03 10:25:07 by aklimchu         ###   ########.fr       */
+/*   Updated: 2024/09/04 11:40:47 by aklimchu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ char	*check_path(char *envp[], char **param)
 	command = param[0];
 	if (ft_strrchr(command, '/')) // checking if input is a directory
 	{
-		is_directory(command);
+		is_directory(command, -1, param);
 		check_command_access(param);
 		return (command);
 	}
