@@ -6,7 +6,7 @@
 /*   By: aklimchu <aklimchu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 08:26:39 by aklimchu          #+#    #+#             */
-/*   Updated: 2024/09/05 09:53:43 by aklimchu         ###   ########.fr       */
+/*   Updated: 2024/09/05 13:46:58 by aklimchu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,15 @@ int	main(int argc, char *argv[], char *envp[])
 
 	fd.null = NULL;
 	fd.hd_input = NULL;
+	fd.hd_flag = 0;
 	if (check_file_and_argc(argc, argv, envp, &fd) == 1)
 		return (1);
 	fd.pid = (pid_t *)malloc(fd.cmd_num * sizeof(pid_t));
 	if (fd.pid == NULL)
 		return (1);
-	fd.in = open(argv[1], O_RDONLY); // opening the file
+	if (fd.hd_flag == 0) // new
+		fd.in = open(argv[1], O_RDONLY);
+	//ft_printf("fd.in %d\n", fd.in);
 	i = 0;
 	while (i < fd.cmd_num - 1)
 	{
@@ -70,7 +73,7 @@ static int	check_file_and_argc(int argc, char *argv[], char *envp[], t_fd *fd)
 
 static int	waiting_for_pids(t_fd *fd, int count)
 {
-	if (waitpid((*fd).pid[count], &(*fd).status, 0) == -1)
+	if (waitpid(fd->pid[count], &fd->status, 0) == -1)
 	{
 		perror("wait() error");
 		return (1);
@@ -78,7 +81,7 @@ static int	waiting_for_pids(t_fd *fd, int count)
 	count = 0;
 	while (count < fd->cmd_num - 1)
 	{
-		if (waitpid((*fd).pid[count], NULL, 0) == -1)
+		if (waitpid(fd->pid[count], NULL, 0) == -1)
 		{
 			perror("wait() error");
 			return (1);

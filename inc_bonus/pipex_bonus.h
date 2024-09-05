@@ -6,7 +6,7 @@
 /*   By: aklimchu <aklimchu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 14:31:32 by aklimchu          #+#    #+#             */
-/*   Updated: 2024/09/05 09:58:07 by aklimchu         ###   ########.fr       */
+/*   Updated: 2024/09/05 11:02:50 by aklimchu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ typedef struct s_fd
 	int		cmd_num;
 	char	*delim;
 	char	*hd_input;
+	int		hd_flag;
 	pid_t	*null;
 	pid_t	*pid;
 }				t_fd;

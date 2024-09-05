@@ -6,7 +6,7 @@
 /*   By: aklimchu <aklimchu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 12:20:07 by aklimchu          #+#    #+#             */
-/*   Updated: 2024/09/05 09:57:04 by aklimchu         ###   ########.fr       */
+/*   Updated: 2024/09/05 13:25:49 by aklimchu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,12 @@ int	pipe_and_fork(t_fd *fd, char *argv[], char *envp[], int i)
 		perror("Pipe failed");
 		return (close_free(fd->in, -1, -1, &fd->null));
 	}
+	/* if (fd->hd_input)
+	{
+		ft_putstr_fd(fd->hd_input, fd->pipe[1]);
+		free(fd->hd_input);
+		fd->hd_input = NULL;
+	} */
 	fd->pid[i] = fork(); // forking
 	if (fd->pid[i] == -1)
 	{
@@ -46,21 +52,24 @@ void	child_process(char *argv[], char **envp, t_fd fd, int i)
 	char	**param_1;
 
 	close(fd.pipe[0]);
-	if (fd.in == -1  && i == 0)
+	/* if (fd.hd_flag == 1 && i == 0)
+		dup2(fd.pipe[0], 0); // protect // ???
+		 */
+	/* else  */if (fd.in == -1  && i == 0)
 	{
-		close_free(fd.pipe[1], -1, -1, &fd.pid);
+		close_free(-1, fd.pipe[1], -1, &fd.pid);
 		exit(1);
 	}
 	else if (fd.in != -1 && i == 0)
 		fd_in_dup(fd);
 	if (dup2(fd.pipe[1], 1) == -1)
 	{
-		close_free(fd.pipe[1], -1, -1, &fd.pid);
+		close_free(-1, fd.pipe[1], -1, &fd.pid);
 		perror("dup() error");
 		exit(1);
 	}
 	close(fd.pipe[1]);
-	param_1 = check_param(argv[i + 2], fd);
+	param_1 = check_param(argv[i + 2 + fd.hd_flag], fd);
 	if (param_1 == NULL)
 	{
 		free_pid(&fd.pid);
@@ -74,7 +83,7 @@ static void	fd_in_dup(t_fd fd)
 {
 	if (dup2(fd.in, 0) == -1)
 	{
-		close_free(fd.pipe[1], fd.in, -1, &fd.pid);
+		close_free(fd.in, fd.pipe[1], -1, &fd.pid);
 		perror("dup() error");
 		exit(1);
 	}
