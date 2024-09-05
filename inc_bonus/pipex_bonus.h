@@ -6,7 +6,7 @@
 /*   By: aklimchu <aklimchu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 14:31:32 by aklimchu          #+#    #+#             */
-/*   Updated: 2024/09/04 15:45:44 by aklimchu         ###   ########.fr       */
+/*   Updated: 2024/09/05 07:59:49 by aklimchu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ typedef struct s_fd
 	int		in;
 	int		out;
 	int		status;
+	int		cmd_num;
 	char	*delim;
 	char	*hd_input;
 	pid_t	*null;
@@ -49,7 +50,7 @@ int		close_free(int fd1, int fd2, int fd3, pid_t **pid);
 int		pipe_and_fork(t_fd *fd, char *argv[], char *envp[], int i);
 int		last_fork(t_fd *fd, char *argv[], char *envp[], int i);
 int		free_pid(pid_t **pid);
-void	here_doc(int argc, char *argv[], char *envp[]);
+void	here_doc(int argc, char *argv[], char *envp[], t_fd *fd);
 int		get_delimiter(char *argv[], t_fd *fd); // do we need?
 
 #endif /* PIPEX_BONUS_H */
