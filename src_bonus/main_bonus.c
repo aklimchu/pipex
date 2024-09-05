@@ -6,7 +6,7 @@
 /*   By: aklimchu <aklimchu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 08:26:39 by aklimchu          #+#    #+#             */
-/*   Updated: 2024/09/05 08:04:58 by aklimchu         ###   ########.fr       */
+/*   Updated: 2024/09/05 09:53:43 by aklimchu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,13 @@ int	main(int argc, char *argv[], char *envp[])
 		return (1);
 	fd.in = open(argv[1], O_RDONLY); // opening the file
 	i = 0;
-	while (i == 0 || i < fd.cmd_num - 1)
+	while (i < fd.cmd_num - 1)
 	{
 		if (pipe_and_fork(&fd, argv, envp, i) == 1) // all forks except for the last one
 			return (free_pid(&fd.pid));
 		i++;
 	}
-	close_free(fd.in, -1, -1, &fd.null);
+	//close_free(fd.in, -1, -1, &fd.null);
 	if (last_fork(&fd, argv, envp, i) == 1 || \
 		waiting_for_pids(&fd, i) == 1)
 		return (free_pid(&fd.pid));

@@ -6,7 +6,7 @@
 #    By: aklimchu <aklimchu@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/24 11:18:05 by aklimchu          #+#    #+#              #
-#    Updated: 2024/09/04 15:40:01 by aklimchu         ###   ########.fr        #
+#    Updated: 2024/09/05 08:22:38 by aklimchu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,7 +39,7 @@ SRC_B 		= ./src_bonus/main_bonus.c ./src_bonus/path_bonus.c \
 			./src_bonus/last_process_bonus.c \
 			./src_bonus/printing_bonus.c \
 			./src_bonus/tools_bonus.c ./src_bonus/ft_split_new_bonus.c \
-			./src_bonus/here_doc.c ./src_bonus/here_doc_tools.c
+			./src_bonus/here_doc_bonus.c ./src_bonus/here_doc_tools_bonus.c
 OBJ_B 		= $(SRC_B:.c=.o)
 INCLUDE_B	= -I "./inc_bonus"
 

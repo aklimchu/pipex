@@ -6,7 +6,7 @@
 /*   By: aklimchu <aklimchu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 12:48:04 by aklimchu          #+#    #+#             */
-/*   Updated: 2024/09/04 11:13:13 by aklimchu         ###   ########.fr       */
+/*   Updated: 2024/09/05 09:57:57 by aklimchu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,27 +22,23 @@ int	last_fork(t_fd *fd, char *argv[], char *envp[], int i)
 	if ((*fd).pid[i] == -1)
 	{
 		perror("Fork failed");
-		/* free((*fd).pid);
-		(*fd).pid = NULL; */
 		free_pid(&(*fd).pid);
 		return (1);
 	}
 	if ((*fd).pid[i] == 0)
 		last_process(argv, envp, *fd /* (*fd).pipe[i - 1] */, i + 2);
-	close((*fd).pipe[i - 1][0]); //write end of pipe already closed?
 	return (0);
 }
 
 void	last_process(char **argv, char **envp, t_fd fd, int i)
 {
-	//int		fd_write;
 	char	*path_2;
 	char	**param_2;
 
-	close(fd.pipe[i - 3][1]);
-	fd.out = open_dest_file(argv[i + 1], fd.pipe[i - 3], fd);
-	dup_tools(fd.pipe[i - 3], fd);
-	close_free(fd.pipe[i - 3][0], fd.out, -1, &fd.null); // do we need to free fd.pid?
+	close(fd.pipe[1]);
+	fd.out = open_dest_file(argv[i + 1], fd.pipe, fd);
+	dup_tools(fd.pipe, fd);
+	close_free(fd.pipe[0], fd.out, -1, &fd.null); // do we need to free fd.pid, fd.pipe[0]?
 	param_2 = check_param(argv[i], fd);
 	if (param_2 == NULL)
 	{
@@ -67,8 +63,7 @@ void	last_process(char **argv, char **envp, t_fd fd, int i)
 
 static void	dup_tools(int pipe[2], t_fd fd)
 {
-	if (dup2(pipe[0], 0) == -1 || \
-		dup2(fd.out, 1) == -1)
+	if (dup2(fd.out, 1) == -1)
 	{
 		close_free(pipe[0], fd.out, -1, &fd.pid);
 		perror("dup() error");
@@ -100,5 +95,3 @@ static int	open_dest_file(char *str, int pipe[2], t_fd fd)
 	}
 	return (fd_write);
 }
-
-// make same is_directory corrections in mandatory part
