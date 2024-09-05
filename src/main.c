@@ -6,7 +6,7 @@
 /*   By: aklimchu <aklimchu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 08:26:39 by aklimchu          #+#    #+#             */
-/*   Updated: 2024/09/03 13:24:08 by aklimchu         ###   ########.fr       */
+/*   Updated: 2024/09/05 10:41:10 by aklimchu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,12 +54,12 @@ static void	check_file_access(char *str)
 
 static int	waiting_for_pids(t_fd *fd)
 {
-	if (waitpid((*fd).p2, &(*fd).status, 0) == -1)
+	if (waitpid(fd->p2, &fd->status, 0) == -1)
 	{
 		perror("wait() error");
 		return (1);
 	}
-	if (waitpid((*fd).p1, NULL, 0) == -1)
+	if (waitpid(fd->p1, NULL, 0) == -1)
 	{
 		perror("wait() error");
 		return (1);
