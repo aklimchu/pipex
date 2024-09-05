@@ -6,30 +6,31 @@
 /*   By: aklimchu <aklimchu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 08:26:39 by aklimchu          #+#    #+#             */
-/*   Updated: 2024/09/04 15:16:59 by aklimchu         ###   ########.fr       */
+/*   Updated: 2024/09/05 08:04:58 by aklimchu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc_bonus/pipex_bonus.h"
 
-static int	check_file_and_argc(int argc, char *argv[], char *envp[]);
+static int	check_file_and_argc(int argc, char *argv[], char *envp[], t_fd *fd);
 
-static int	waiting_for_pids(t_fd *fd, int argc, int count);
+static int	waiting_for_pids(t_fd *fd, int count);
 
 int	main(int argc, char *argv[], char *envp[])
 {
 	t_fd	fd;
 	int		i;
 
-	if (check_file_and_argc(argc, argv, envp) == 1)
+	fd.null = NULL;
+	fd.hd_input = NULL;
+	if (check_file_and_argc(argc, argv, envp, &fd) == 1)
 		return (1);
-	fd.null = NULL; // mention for here_doc?
-	fd.pid = (pid_t *)malloc((argc - 3) * sizeof(pid_t));
+	fd.pid = (pid_t *)malloc(fd.cmd_num * sizeof(pid_t));
 	if (fd.pid == NULL)
 		return (1);
 	fd.in = open(argv[1], O_RDONLY); // opening the file
 	i = 0;
-	while (i == 0 || i < argc - 4)
+	while (i == 0 || i < fd.cmd_num - 1)
 	{
 		if (pipe_and_fork(&fd, argv, envp, i) == 1) // all forks except for the last one
 			return (free_pid(&fd.pid));
@@ -37,7 +38,7 @@ int	main(int argc, char *argv[], char *envp[])
 	}
 	close_free(fd.in, -1, -1, &fd.null);
 	if (last_fork(&fd, argv, envp, i) == 1 || \
-		waiting_for_pids(&fd, argc, i) == 1)
+		waiting_for_pids(&fd, i) == 1)
 		return (free_pid(&fd.pid));
 	free_pid(&fd.pid);
 	if (WIFEXITED(fd.status))
@@ -45,7 +46,7 @@ int	main(int argc, char *argv[], char *envp[])
 	return (0);
 }
 
-static int	check_file_and_argc(int argc, char *argv[], char *envp[])
+static int	check_file_and_argc(int argc, char *argv[], char *envp[], t_fd *fd)
 {
 	if (argc < 5)
 	{
@@ -55,15 +56,19 @@ static int	check_file_and_argc(int argc, char *argv[], char *envp[])
 		return (1);
 	}
 	if (ft_strncmp(argv[1], "here_doc\0", 9) == 0)
-		here_doc(argc, argv, envp);
+	{
+		here_doc(argc, argv, envp, fd);
+		return (0);
+	}
 	if (access(argv[1], R_OK) == -1 && errno == EACCES)
 		printing(argv[1], ": Permission denied\n", 2);
 	if (access(argv[1], F_OK) == -1 && errno == ENOENT)
 		printing(argv[1], ": No such file or directory\n", 2);
+	fd->cmd_num = argc - 3;
 	return (0);
 }
 
-static int	waiting_for_pids(t_fd *fd, int argc, int count)
+static int	waiting_for_pids(t_fd *fd, int count)
 {
 	if (waitpid((*fd).pid[count], &(*fd).status, 0) == -1)
 	{
@@ -71,7 +76,7 @@ static int	waiting_for_pids(t_fd *fd, int argc, int count)
 		return (1);
 	}
 	count = 0;
-	while (count < argc - 4)
+	while (count < fd->cmd_num - 1)
 	{
 		if (waitpid((*fd).pid[count], NULL, 0) == -1)
 		{

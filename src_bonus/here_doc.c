@@ -6,19 +6,19 @@
 /*   By: aklimchu <aklimchu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 14:11:02 by aklimchu          #+#    #+#             */
-/*   Updated: 2024/09/04 16:03:22 by aklimchu         ###   ########.fr       */
+/*   Updated: 2024/09/05 08:19:47 by aklimchu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc_bonus/pipex_bonus.h"
 
-static void	get_hd_input(char *argv[], t_fd *fd);
+static void	get_hd_input(int argc, char *argv[], t_fd *fd);
 
 static char	*add_hd_memory(char *str, size_t add_len);
 
-void	here_doc(int argc, char *argv[], char *envp[])
+void	here_doc(int argc, char *argv[], char *envp[], t_fd *fd)
 {
-	t_fd	fd;
+	//t_fd	fd;
 
 	(void)envp;
 	if (argc < 6)
@@ -26,24 +26,23 @@ void	here_doc(int argc, char *argv[], char *envp[])
 		ft_putstr_fd("Not enough arguments. Correct input format: \n", 2);
 		ft_putstr_fd("./pipex file1 cmd1 cmd2 file2\n", 2);
 		ft_putstr_fd("./pipex here_doc LIMITER cmd cmd1 file\n", 2);
-		exit(1);
+		exit(1); // return?
 	}
-	fd.null = NULL;
-	fd.hd_input = NULL;
-	if (get_delimiter(argv, &fd) == 1)
+	if (get_delimiter(argv, fd) == 1)
 	{
 		// freeing
-		exit(1);
+		exit(1); // return?
 	}
-	get_hd_input(argv, &fd);
-	exit(0);
+	get_hd_input(argc, argv, fd);
+	exit(0);	// delete
 }
 
-static void	get_hd_input(char *argv[], t_fd *fd)
+static void	get_hd_input(int argc, char *argv[], t_fd *fd)
 {
 	char	*new_line;
 
 	(void)argv;
+	fd->cmd_num = argc - 4;
 	new_line = NULL;
 	//ft_printf("delim: %s\n", fd->delim);
 	ft_printf("pipex: >");
