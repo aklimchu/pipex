@@ -23,14 +23,13 @@ int	fork_2(char **argv, char **envp, t_fd *fd)
 	fd->p2 = fork();
 	if (fd->p2 == -1)
 	{
-		perror("Fork failed");
-		close_fds(-1, (*fd).pipe[0], (*fd).pipe[1]); // writing end already closed?
+		perror("fork() failed");
+		close_fds(-1, (*fd).pipe[0], (*fd).pipe[1]);
 		return (1);
 	}
 	if (fd->p2 == 0)
 		child_process(argv, envp, *fd);
-	close_fds(-1, (*fd).pipe[0], (*fd).pipe[1]); // writing end already closed?
-	//waitpid(fd->p2, &(*fd).status, 0);
+	close_fds(-1, (*fd).pipe[0], (*fd).pipe[1]);
 	return (0);
 }
 
@@ -40,7 +39,7 @@ static void	child_process(char **argv, char **envp, t_fd fd)
 
 	close(fd.pipe[1]);
 	fd.write = open_dest_file(argv[4], fd.pipe);
-	if (dup2(fd.pipe[0], 0) == -1 ||\
+	if (dup2(fd.pipe[0], 0) == -1 || \
 		dup2(fd.write, 1) == -1)
 	{
 		close_fds(fd.pipe[0], fd.write, -1);
@@ -82,7 +81,7 @@ static int	open_dest_file(char *str, int pipe[2])
 static void	path_and_exec(char	**param_2, char **envp)
 {
 	char	*path_2;
-	
+
 	path_2 = check_path(envp, param_2);
 	if (path_2 == NULL)
 	{
@@ -92,9 +91,7 @@ static void	path_and_exec(char	**param_2, char **envp)
 	if (execve(path_2, param_2, envp) == -1)
 	{
 		printing(param_2[0], ": Permission denied\n", 2);
-		free_all(param_2, NULL, NULL); // freeing path_2?
+		free_all(param_2, NULL, NULL);
 		exit(126);
 	}
-	/* free_all(NULL, param_2, path_2);
-	exit(0); */
 }

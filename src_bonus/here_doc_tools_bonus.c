@@ -1,21 +1,35 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   here_doc_tools_bonus.c                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: aklimchu <aklimchu@student.hive.fi>        +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/04 14:15:44 by aklimchu          #+#    #+#             */
-/*   Updated: 2024/09/05 13:35:15 by aklimchu         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
+// 42 header!!!
 
 #include "../inc_bonus/pipex_bonus.h"
 
-int	get_delimiter(char *argv[], t_fd *fd)
+size_t	ft_strchr_fix(const char *s, int c)
 {
-	(*fd).delim = ft_strdup(argv[2]);
-	if ((*fd).delim == NULL)
-		return (1);
+	char	new_c;
+	int		i;
+
+	new_c = c + '\0';
+	i = 0;
+	while (1)
+	{
+		if (*s == new_c)
+			return (i);
+		s++;
+		i++;
+	}
 	return (0);
+}
+
+int	free_str(char *str1, char *str2)
+{
+	if (str1)
+	{
+		free(str1);
+		str1 = NULL;
+	}
+	if (str2)
+	{
+		free(str2);
+		str2 = NULL;
+	}
+	return (1);
 }

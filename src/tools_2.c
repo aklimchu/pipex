@@ -30,12 +30,6 @@ void	check_command_access(char **param)
 	char	*command;
 
 	command = param[0];
-	/* if (access(command, X_OK) == -1 && errno == EACCES)
-	{
-		printing(command, "Permission denied", 2);
-		free_all(param, NULL, NULL, copy_out);
-		exit(126);
-	} */
 	if (access(command, F_OK) == -1 && errno == ENOENT)
 	{
 		printing(command, ": No such file or directory\n", 2);

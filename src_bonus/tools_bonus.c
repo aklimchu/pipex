@@ -16,14 +16,17 @@ static size_t	checkc(char c, char const *set);
 
 static size_t	checklen(char const *s1, char const *set);
 
-int	free_pid(pid_t **pid)
+void	check_command_access(char **param, t_fd fd)
 {
-	if (*pid)
+	char	*command;
+
+	command = param[0];
+	if (access(command, F_OK) == -1 && errno == ENOENT)
 	{
-		free(*pid);
-		*pid = NULL;
+		printing(command, ": No such file or directory\n", 2);
+		free_all(param, NULL, NULL, &fd.pid);
+		exit(127);
 	}
-	return (1);
 }
 
 int	is_directory(char *path, t_fd fd, int fd_pipe, char **param)

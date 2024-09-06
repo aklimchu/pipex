@@ -18,25 +18,19 @@ static void	path_and_exec(char	**param_1, char **envp, t_fd fd);
 
 int	pipe_and_fork(t_fd *fd, char *argv[], char *envp[], int i)
 {
-	if (pipe(fd->pipe) == -1) // opening the pipe
+	if (pipe(fd->pipe) == -1)
 	{
 		perror("Pipe failed");
 		return (close_free(fd->in, -1, -1, &fd->null));
 	}
-	/* if (fd->hd_input)
-	{
-		ft_putstr_fd(fd->hd_input, fd->pipe[1]);
-		free(fd->hd_input);
-		fd->hd_input = NULL;
-	} */
-	fd->pid[i] = fork(); // forking
+	fd->pid[i] = fork();
 	if (fd->pid[i] == -1)
 	{
 		perror("Fork failed");
 		return (close_free(fd->in, fd->pipe[0], fd->pipe[1], &fd->null));
 	}
 	if (fd->pid[i] == 0)
-		child_process(argv, envp, *fd, i); // child process
+		child_process(argv, envp, *fd, i);
 	if (dup2(fd->pipe[0], 0) == -1)
 	{
 		close_free(fd->in, fd->pipe[0], fd->pipe[1], &fd->null);
@@ -52,10 +46,7 @@ void	child_process(char *argv[], char **envp, t_fd fd, int i)
 	char	**param_1;
 
 	close(fd.pipe[0]);
-	/* if (fd.hd_flag == 1 && i == 0)
-		dup2(fd.pipe[0], 0); // protect // ???
-		 */
-	/* else  */if (fd.in == -1  && i == 0)
+	if (fd.in == -1 && i == 0)
 	{
 		close_free(-1, fd.pipe[1], -1, &fd.pid);
 		exit(1);
@@ -76,7 +67,6 @@ void	child_process(char *argv[], char **envp, t_fd fd, int i)
 		exit(1);
 	}
 	path_and_exec(param_1, envp, fd);
-	//free_pid(&fd.pid); // do we need?
 }
 
 static void	fd_in_dup(t_fd fd)
@@ -100,13 +90,10 @@ static void	path_and_exec(char	**param_1, char **envp, t_fd fd)
 		free_all(param_1, NULL, NULL, &fd.pid);
 		exit(1);
 	}
-	// do we need to free pids here?
 	if (execve(path_1, param_1, envp) == -1)
 	{
 		printing(param_1[0], ": Permission denied\n", 2);
-		free_all(param_1, NULL, NULL, &fd.pid); // freeing path_1?
+		free_all(param_1, NULL, NULL, &fd.pid);
 		exit(126);
 	}
-	/* free_all(param_1, NULL, path_1);
-	exit(0); */
 }

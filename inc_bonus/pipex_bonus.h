@@ -37,7 +37,7 @@ typedef struct s_fd
 char	*ft_strjoin_new(char const *s1, char const *s2, char const *s3);
 char	*check_path(char *envp[], char **param, t_fd fd);
 char	**check_param(char *str, t_fd fd);
-void	free_all(char **arr_1, char **arr_2, char *str, pid_t **pid);
+int		free_all(char **arr_1, char **arr_2, char *str, pid_t **pid);
 void	child_process(char *argv[], char **envp, t_fd fd, int i);
 void	last_process(char **argv, char **envp, t_fd fd, int i);
 void	printing(char *cmd, char *result, int fd);
@@ -51,7 +51,8 @@ int		close_free(int fd1, int fd2, int fd3, pid_t **pid);
 int		pipe_and_fork(t_fd *fd, char *argv[], char *envp[], int i);
 int		last_fork(t_fd *fd, char *argv[], char *envp[], int i);
 int		free_pid(pid_t **pid);
-void	here_doc(int argc, char *argv[], char *envp[], t_fd *fd);
-int		get_delimiter(char *argv[], t_fd *fd);
+int		here_doc(int argc, char *argv[], t_fd *fd);
+size_t	ft_strchr_fix(const char *s, int c);
+int		free_str(char *str1, char *str2);
 
 #endif /* PIPEX_BONUS_H */
