@@ -12,7 +12,9 @@
 
 #include "../inc_bonus/pipex_bonus.h"
 
-static int	check_file_and_argc(int argc, char *argv[], char *envp[], t_fd *fd);
+static char	*assign_values(int argc, char *argv[], t_fd *fd);
+
+static int	check_file_and_argc(int argc, char *argv[], t_fd *fd);
 
 static int	waiting_for_pids(t_fd *fd, int count);
 
@@ -21,25 +23,17 @@ int	main(int argc, char *argv[], char *envp[])
 	t_fd	fd;
 	int		i;
 
-	fd.null = NULL;
-	fd.hd_input = NULL;
-	fd.hd_flag = 0;
-	if (check_file_and_argc(argc, argv, envp, &fd) == 1)
+	if (assign_values(argc, argv, &fd) == NULL)
 		return (1);
-	fd.pid = (pid_t *)malloc(fd.cmd_num * sizeof(pid_t));
-	if (fd.pid == NULL)
-		return (1);
-	if (fd.hd_flag == 0) // new
+	if (fd.hd_flag == 0)
 		fd.in = open(argv[1], O_RDONLY);
-	//ft_printf("fd.in %d\n", fd.in);
 	i = 0;
 	while (i < fd.cmd_num - 1)
 	{
-		if (pipe_and_fork(&fd, argv, envp, i) == 1) // all forks except for the last one
+		if (pipe_and_fork(&fd, argv, envp, i) == 1)
 			return (free_pid(&fd.pid));
 		i++;
 	}
-	//close_free(fd.in, -1, -1, &fd.null);
 	if (last_fork(&fd, argv, envp, i) == 1 || \
 		waiting_for_pids(&fd, i) == 1)
 		return (free_pid(&fd.pid));
@@ -49,7 +43,23 @@ int	main(int argc, char *argv[], char *envp[])
 	return (0);
 }
 
-static int	check_file_and_argc(int argc, char *argv[], char *envp[], t_fd *fd)
+static char	*assign_values(int argc, char *argv[], t_fd *fd)
+{
+	fd->null = NULL;
+	fd->hd_input = NULL;
+	fd->hd_flag = 0;
+	if (check_file_and_argc(argc, argv, fd) == 1)
+		return (NULL);
+	fd->pid = (pid_t *)malloc(fd->cmd_num * sizeof(pid_t));
+	if (fd->pid == NULL)
+	{
+		perror("malloc() failed");
+		return (NULL);
+	}
+	return ("");
+}
+
+static int	check_file_and_argc(int argc, char *argv[], t_fd *fd)
 {
 	if (argc < 5)
 	{
@@ -60,7 +70,8 @@ static int	check_file_and_argc(int argc, char *argv[], char *envp[], t_fd *fd)
 	}
 	if (ft_strncmp(argv[1], "here_doc\0", 9) == 0)
 	{
-		here_doc(argc, argv, envp, fd);
+		if (here_doc(argc, argv, fd) == 1)
+			return (1);
 		return (0);
 	}
 	if (access(argv[1], R_OK) == -1 && errno == EACCES)
@@ -89,4 +100,14 @@ static int	waiting_for_pids(t_fd *fd, int count)
 		count++;
 	}
 	return (0);
+}
+
+int	free_pid(pid_t **pid)
+{
+	if (*pid)
+	{
+		free(*pid);
+		*pid = NULL;
+	}
+	return (1);
 }

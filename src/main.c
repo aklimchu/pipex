@@ -27,8 +27,8 @@ int	main(int argc, char *argv[], char *envp[])
 		return (1);
 	}
 	check_file_access(argv[1]);
-	fd.read = open(argv[1], O_RDONLY); //reading the file
-	if (pipe(fd.pipe) == -1) // opening the pipe
+	fd.read = open(argv[1], O_RDONLY);
+	if (pipe(fd.pipe) == -1)
 	{
 		perror("Pipe failed");
 		return (close(fd.read));

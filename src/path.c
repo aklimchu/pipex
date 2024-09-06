@@ -12,9 +12,9 @@
 
 #include "../inc/pipex.h"
 
-static char	**get_path(char *envp[]);
+static void	set_value(char set[3], char *str);
 
-static void	str_new_print(char *str, char *str_new);
+static char	**get_path(char *envp[]);
 
 static char	*get_full_path(char **path, char *command, char **param);
 
@@ -25,21 +25,23 @@ char	**check_param(char *str)
 	char	**param;
 	int		word_num;
 
-	if (str[0] == '\0' || str[0] == ' ')
-	{
-		printing_nop(str, ": command not found\n", 2);
-		exit(127);
-	}
-	set[0] = '"';
-	set[1] = '\\';
-	set[2] = '\0';
+	set_value(set, str);
 	str_new = str_filter(str, set);
 	if (str_new == NULL)
+	{
+		perror("malloc() failed");
 		return (NULL);
+	}
 	if (str_new[0] == '\0')
-		str_new_print(str, str_new);
+	{
+		printing_nop(str, ": command not found\n", 2);
+		free_all(NULL, NULL, str_new);
+		exit(127);
+	}
 	word_num = count_param(str_new);
 	param = ft_split_new(str_new, ' ', word_num);
+	if (param == NULL)
+		perror("malloc() failed");
 	free(str_new);
 	return (param);
 }
@@ -51,13 +53,13 @@ char	*check_path(char *envp[], char **param)
 	char	*command;
 
 	command = param[0];
-	if (ft_strrchr(command, '/')) // checking if input is a directory
+	if (ft_strrchr(command, '/'))
 	{
 		is_directory(command, -1, param);
 		check_command_access(param);
 		return (command);
 	}
-	path = get_path(envp); // getting path to the command
+	path = get_path(envp);
 	if (path == NULL)
 	{
 		printing(command, ": No such file or directory\n", 2);
@@ -66,6 +68,18 @@ char	*check_path(char *envp[], char **param)
 	}
 	full_path = get_full_path(path, command, param);
 	return (full_path);
+}
+
+static void	set_value(char set[3], char *str)
+{
+	if (str[0] == '\0' || str[0] == ' ')
+	{
+		printing_nop(str, ": command not found\n", 2);
+		exit(127);
+	}
+	set[0] = '"';
+	set[1] = '\\';
+	set[2] = '\0';
 }
 
 static char	**get_path(char *envp[])
@@ -87,13 +101,6 @@ static char	**get_path(char *envp[])
 		i++;
 	}
 	return (path);
-}
-
-static void	str_new_print(char *str, char *str_new)
-{
-	printing_nop(str, ": command not found\n", 2);
-	free_all(NULL, NULL, str_new);
-	exit(127);
 }
 
 static char	*get_full_path(char **path, char *command, char **param)

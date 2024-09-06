@@ -12,7 +12,7 @@
 
 #include "../inc_bonus/pipex_bonus.h"
 
-static void	dup_tools(int pipe[2], t_fd fd);
+static void	dup_tools(t_fd fd);
 
 static int	open_dest_file(char *str, int pipe[2], t_fd fd);
 
@@ -26,7 +26,7 @@ int	last_fork(t_fd *fd, char *argv[], char *envp[], int i)
 		return (1);
 	}
 	if (fd->pid[i] == 0)
-		last_process(argv, envp, *fd /* (*fd).pipe[i - 1] */, i + 2);
+		last_process(argv, envp, *fd, i + 2);
 	return (0);
 }
 
@@ -37,8 +37,8 @@ void	last_process(char **argv, char **envp, t_fd fd, int i)
 
 	close(fd.pipe[1]);
 	fd.out = open_dest_file(argv[i + 1 + fd.hd_flag], fd.pipe, fd);
-	dup_tools(fd.pipe, fd);
-	close_free(-1, fd.pipe[0], fd.out, &fd.null); // do we need to free fd.pid, fd.pipe[0]?
+	dup_tools(fd);
+	close_free(-1, -1, fd.out, &fd.null);
 	param_2 = check_param(argv[i + fd.hd_flag], fd);
 	if (param_2 == NULL)
 	{
@@ -46,7 +46,7 @@ void	last_process(char **argv, char **envp, t_fd fd, int i)
 		exit(1);
 	}
 	path_2 = check_path(envp, param_2, fd);
-	if (path_2 == NULL) // free pid?
+	if (path_2 == NULL)
 	{
 		free_all(param_2, NULL, NULL, &fd.pid);
 		exit(1);
@@ -54,18 +54,16 @@ void	last_process(char **argv, char **envp, t_fd fd, int i)
 	if (execve(path_2, param_2, envp) == -1)
 	{
 		printing(param_2[0], ": Permission denied\n", 2);
-		free_all(param_2, NULL, NULL, &fd.pid); // freeing path_2?
+		free_all(param_2, NULL, NULL, &fd.pid);
 		exit(126);
 	}
-	/* free_all(NULL, param_2, path_2);
-	exit(0); */
 }
 
-static void	dup_tools(int pipe[2], t_fd fd)
+static void	dup_tools(t_fd fd)
 {
 	if (dup2(fd.out, 1) == -1)
 	{
-		close_free(-1, pipe[0], fd.out, &fd.pid);
+		close_free(-1, -1, fd.out, &fd.pid);
 		perror("dup() error");
 		exit(1);
 	}
