@@ -6,7 +6,7 @@
 /*   By: aklimchu <aklimchu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 14:11:02 by aklimchu          #+#    #+#             */
-/*   Updated: 2024/09/05 13:46:12 by aklimchu         ###   ########.fr       */
+/*   Updated: 2024/09/09 11:31:38 by aklimchu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	here_doc(int argc, char *argv[], t_fd *fd)
 	if (argc < 6)
 	{
 		ft_putstr_fd("Not enough arguments. Correct input format: \n", 2);
-		ft_putstr_fd("./pipex file1 cmd1 cmd2 file2\n", 2);
+		ft_putstr_fd("./pipex file1 cmd1 cmd2 cmd3 ... cmdn file2\n", 2);
 		ft_putstr_fd("./pipex here_doc LIMITER cmd cmd1 file\n", 2);
 		return (1);
 	}
@@ -69,7 +69,7 @@ static int	get_hd_input(t_fd *fd)
 		perror("malloc() failed");
 		return (1);
 	}
-	ft_printf("pipex: >");
+	ft_printf("pipex: > ");
 	new_line = get_next_line(0);
 	while (new_line)
 	{
@@ -94,7 +94,7 @@ static char	*new_hd_input(char **hd_input, char **new_line)
 	*hd_input = ft_strncat(*hd_input, *new_line, \
 			ft_strlen(*hd_input) + ft_strlen(*new_line) + 1);
 	free_str(*new_line, NULL);
-	ft_printf("pipex: >");
+	ft_printf("pipex: > ");
 	*new_line = get_next_line(0);
 	return ("");
 }

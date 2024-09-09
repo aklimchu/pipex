@@ -6,7 +6,7 @@
 /*   By: aklimchu <aklimchu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 08:26:39 by aklimchu          #+#    #+#             */
-/*   Updated: 2024/09/05 10:41:10 by aklimchu         ###   ########.fr       */
+/*   Updated: 2024/09/09 11:33:20 by aklimchu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,10 @@ int	main(int argc, char *argv[], char *envp[])
 {
 	t_fd	fd;
 
-	if (argc < 5)
+	if (argc != 5)
 	{
-		ft_putstr_fd("Not enough arguments. Correct input format: ", 2);
+		ft_putstr_fd("Incorrect number of arguments. ", 2);
+		ft_putstr_fd("Correct input format:\n", 2);
 		ft_putstr_fd("./pipex file1 cmd1 cmd2 file2\n", 2);
 		return (1);
 	}
