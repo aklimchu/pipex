@@ -6,7 +6,7 @@
 /*   By: aklimchu <aklimchu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 14:31:32 by aklimchu          #+#    #+#             */
-/*   Updated: 2024/09/05 11:02:50 by aklimchu         ###   ########.fr       */
+/*   Updated: 2024/09/09 08:21:45 by aklimchu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@
 # include "../libft/libft.h"
 # include <sys/types.h>
 # include <fcntl.h>
-# include <stdio.h>	//perror
-# include <sys/wait.h> // waitpid
-# include <errno.h> // do we need?
+# include <stdio.h>
+# include <sys/wait.h>
+# include <errno.h>
 
 typedef struct s_fd
 {

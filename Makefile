@@ -6,7 +6,7 @@
 #    By: aklimchu <aklimchu@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/24 11:18:05 by aklimchu          #+#    #+#              #
-#    Updated: 2024/09/05 08:22:38 by aklimchu         ###   ########.fr        #
+#    Updated: 2024/09/09 09:13:34 by aklimchu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,8 +14,8 @@
 NAME		= pipex
 
 # Compiler
-CC 			= gcc
-CFLAGS		= -ggdb3 -Wall -Wextra -Werror -I $(LIBFT_DIR)
+CC 			= cc
+CFLAGS		= -Wall -Wextra -Werror -I $(LIBFT_DIR)
 RM			= rm -f
 
 # Libft
@@ -59,17 +59,20 @@ $(NAME):	$(OBJ)
 %.o: %.c 
 	$(CC) $(CFLAGS) $(INCLUDE_B) $^ -c -o $@
 
-bonus:	$(OBJ_B)
+bonus:	.bonus
+
+.bonus:	$(OBJ_B)
 	@make -C $(LIBFT_DIR)		# make libft
 	@cp $(LIBFT_LIB) $(NAME)	# copy libft to current
 	@$(CC) $(CFLAGS) $(OBJ_B) $(LIBFT_LIB) $(INCLUDE_B) -o $(NAME)
+	touch .bonus
 
 clean:
 	$(RM) $(OBJ) $(OBJ_B)
 	@make clean -C $(LIBFT_DIR)
 
 fclean:		clean 
-	$(RM) $(NAME) $(LIBFT_LIB)
+	$(RM) $(NAME) $(LIBFT_LIB) .bonus
 
 re: 		fclean all
 

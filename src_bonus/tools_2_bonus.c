@@ -6,7 +6,7 @@
 /*   By: aklimchu <aklimchu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 15:12:18 by aklimchu          #+#    #+#             */
-/*   Updated: 2024/09/05 12:02:15 by aklimchu         ###   ########.fr       */
+/*   Updated: 2024/09/09 09:07:35 by aklimchu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	free_all(char **arr_1, char **arr_2, char *str, pid_t **pid)
 	if (arr_1)
 		free_double_arr(arr_1);
 	if (arr_2)
-		free_double_arr(arr_1);
+		free_double_arr(arr_2);
 	if (str)
 	{
 		free(str);
