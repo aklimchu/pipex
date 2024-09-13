@@ -26,11 +26,11 @@ make bonus
 ```bash
 ./pipex file1 cmd1 cmd2 file2
 ```
-* #### Pipex-bonus(multiple pipes):
+* #### Pipex-bonus (multiple pipes):
 ```bash
 ./pipex file1 cmd1 cmd2 cmd3 ... cmdn file2
 ```
-* #### Pipex-bonus(user input):
+* #### Pipex-bonus (user input):
 ```bash
 ./pipex here_doc LIMITER cmd cmd1 file
 ```
