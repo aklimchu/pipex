@@ -1,6 +1,18 @@
-# pipex: Implementation of pipes
+# pipex: A Simple UNIX Pipe Implementation
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://opensource.org/licenses/GPL-3.0)
-Try piping various commands and also here_doc (user input from the command line)!
+`pipex` is a lightweight C program that emulates the behavior of UNIX pipes. It allows you to chain multiple commands together, passing the output of one as the input to the next. This is ideal for executing complex command-line operations efficiently.
+
+## ✨ Features
+- Supports standard UNIX pipes for chaining commands
+- Handles multiple pipes
+- Accepts user input through `here_doc`
+
+## 📚 Table of Contents
+- [Installation](#-installation)
+- [Building the Program](#️-build-the-program)
+- [Running the Program](#-running-the-program)
+- [Cleaning Up](#-cleaning-up)
+- [License](#license)
 
 ## 🚀 Installation!
 
