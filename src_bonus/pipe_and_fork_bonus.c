@@ -16,6 +16,8 @@ static void	fd_in_dup(t_fd fd);
 
 static void	path_and_exec(char	**param_1, char **envp, t_fd fd);
 
+//The function creates the pipe,
+// then creates the fork and then enters the child process
 int	pipe_and_fork(t_fd *fd, char *argv[], char *envp[], int i)
 {
 	if (pipe(fd->pipe) == -1)
@@ -41,6 +43,7 @@ int	pipe_and_fork(t_fd *fd, char *argv[], char *envp[], int i)
 	return (0);
 }
 
+//Child process where user command is called
 void	child_process(char *argv[], char **envp, t_fd fd, int i)
 {
 	char	**param_1;
@@ -69,6 +72,7 @@ void	child_process(char *argv[], char **envp, t_fd fd, int i)
 	path_and_exec(param_1, envp, fd);
 }
 
+//The function finds a path to user command and execute it
 static void	fd_in_dup(t_fd fd)
 {
 	if (dup2(fd.in, 0) == -1)
@@ -80,6 +84,7 @@ static void	fd_in_dup(t_fd fd)
 	close(fd.in);
 }
 
+//The function finds the path to the user command and executes it
 static void	path_and_exec(char	**param_1, char **envp, t_fd fd)
 {
 	char	*path_1;

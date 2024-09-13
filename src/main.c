@@ -45,6 +45,7 @@ int	main(int argc, char *argv[], char *envp[])
 	return (0);
 }
 
+//The function checks the access rights of input file
 static void	check_file_access(char *str)
 {
 	if (access(str, R_OK) == -1 && errno == EACCES)
@@ -53,6 +54,8 @@ static void	check_file_access(char *str)
 		printing(str, ": No such file or directory\n", 2);
 }
 
+//The function waits for child process to finish and then
+//return the exit code of the second child process
 static int	waiting_for_pids(t_fd *fd)
 {
 	if (waitpid(fd->p2, &fd->status, 0) == -1)

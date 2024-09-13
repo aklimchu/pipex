@@ -20,6 +20,7 @@ static char		*new_hd_input(char **hd_input, char **new_line);
 
 static char		*add_hd_memory(char *str, size_t add_len);
 
+//The function implements the scenario when argv[1] is here_doc
 int	here_doc(int argc, char *argv[], t_fd *fd)
 {
 	if (argc < 6)
@@ -47,6 +48,7 @@ int	here_doc(int argc, char *argv[], t_fd *fd)
 	return (0);
 }
 
+//The function saves the delimiter (argv[2]) to allocated string
 static int	get_delimiter(char *argv[], t_fd *fd)
 {
 	fd->delim = ft_strdup(argv[2]);
@@ -58,6 +60,7 @@ static int	get_delimiter(char *argv[], t_fd *fd)
 	return (0);
 }
 
+//The function reads the user input with the help of get_next_line tool
 static int	get_hd_input(t_fd *fd)
 {
 	char	*new_line;
@@ -83,6 +86,8 @@ static int	get_hd_input(t_fd *fd)
 	return (0);
 }
 
+//The function concatenates the string read from the new line
+//to the input from previous lines
 static char	*new_hd_input(char **hd_input, char **new_line)
 {
 	*hd_input = add_hd_memory(*hd_input, ft_strlen(*new_line));
@@ -99,6 +104,7 @@ static char	*new_hd_input(char **hd_input, char **new_line)
 	return ("");
 }
 
+//The function allocates new memory to store user input from command line
 static char	*add_hd_memory(char *str, size_t add_len)
 {
 	char	*temp;

@@ -16,6 +16,7 @@ static void	child_process(char **argv, char **envp, t_fd fd);
 
 static void	path_and_exec(char	**param_1, char **envp);
 
+//The function creates the fork and then enter the child process
 int	fork_1(char **argv, char **envp, t_fd *fd)
 {
 	fd->p1 = fork();
@@ -31,6 +32,7 @@ int	fork_1(char **argv, char **envp, t_fd *fd)
 	return (0);
 }
 
+//Child process where user command is called from argv[2]
 static void	child_process(char **argv, char **envp, t_fd fd)
 {
 	char	**param_1;
@@ -55,6 +57,7 @@ static void	child_process(char **argv, char **envp, t_fd fd)
 	path_and_exec(param_1, envp);
 }
 
+//The function finds a path to user command and execute it
 static void	path_and_exec(char	**param_1, char **envp)
 {
 	char	*path_1;

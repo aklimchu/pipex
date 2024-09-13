@@ -16,6 +16,8 @@ static char		**free_m(char **new_s, size_t i);
 
 static size_t	nextc(char const *s, char c);
 
+//The function splits a string s to selected number of substrings
+//with the character c, used as delimiter
 char	**ft_split_new(char const *s, char c, int str_num)
 {
 	char	**new_s;

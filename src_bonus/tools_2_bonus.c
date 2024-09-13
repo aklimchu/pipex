@@ -14,8 +14,7 @@
 
 static void	free_double_arr(char **arr);
 
-static int	word_count(char *str);
-
+//The function frees selected memory
 int	free_all(char **arr_1, char **arr_2, char *str, pid_t **pid)
 {
 	if (arr_1)
@@ -35,6 +34,7 @@ int	free_all(char **arr_1, char **arr_2, char *str, pid_t **pid)
 	return (1);
 }
 
+//The function frees selected double-dimensional array
 static void	free_double_arr(char **arr)
 {
 	int		i;
@@ -48,6 +48,8 @@ static void	free_double_arr(char **arr)
 	}
 }
 
+//The function closes selected file descriptors and frees
+//the array of pids
 int	close_free(int fd1, int fd2, int fd3, pid_t **pid)
 {
 	if (fd1 >= 0)
@@ -64,33 +66,29 @@ int	close_free(int fd1, int fd2, int fd3, pid_t **pid)
 	return (1);
 }
 
+//The function returns the number of parameters contained in the
+//user input along with the command name
 int	count_param(char *str)
-{
-	int		i;
-
-	i = 2;
-	if (ft_strnstr(str, "grep", 4) && ft_strnstr(str, "-", 6) == 0)
-		return (i);
-	else
-		return (word_count(str));
-}
-
-static int	word_count(char *str)
 {
 	int		count;
 	int		flag;
-
-	count = 1;
-	flag = 0;
-	while (*str)
+	
+	if (ft_strnstr(str, "grep", 4) && ft_strnstr(str, "-", 6) == 0)
+		return (2);
+	else
 	{
-		if (*str == '{')
-			flag = 1;
-		if (*str == '}')
-			flag = 0;
-		if (*str == ' ' && *(str + 1) != ' ' && flag == 0)
-			count++;
-		str++;
+		count = 1;
+		flag = 0;
+		while (*str)
+		{
+			if (*str == '{')
+				flag = 1;
+			if (*str == '}')
+				flag = 0;
+			if (*str == ' ' && *(str + 1) != ' ' && flag == 0)
+				count++;
+			str++;
+		}
 	}
 	return (count);
 }
