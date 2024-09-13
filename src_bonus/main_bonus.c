@@ -43,6 +43,8 @@ int	main(int argc, char *argv[], char *envp[])
 	return (0);
 }
 
+//The function initializes the parameters and allocated
+//the array of pids
 static char	*assign_values(int argc, char *argv[], t_fd *fd)
 {
 	fd->null = NULL;
@@ -59,6 +61,8 @@ static char	*assign_values(int argc, char *argv[], t_fd *fd)
 	return ("");
 }
 
+//The function chooses the scenario based on the number of arguments provided
+//by user and based on the argv[1] (if it is here_doc or not)
 static int	check_file_and_argc(int argc, char *argv[], t_fd *fd)
 {
 	if (argc < 5)
@@ -82,6 +86,8 @@ static int	check_file_and_argc(int argc, char *argv[], t_fd *fd)
 	return (0);
 }
 
+//The function will wait for child process to finish and then
+//return the exit code of the second child process
 static int	waiting_for_pids(t_fd *fd, int count)
 {
 	if (waitpid(fd->pid[count], &fd->status, 0) == -1)
@@ -102,6 +108,7 @@ static int	waiting_for_pids(t_fd *fd, int count)
 	return (0);
 }
 
+//The function frees the array of pids
 int	free_pid(pid_t **pid)
 {
 	if (*pid)

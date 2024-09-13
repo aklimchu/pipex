@@ -16,6 +16,7 @@ static size_t	checkc(char c, char const *set);
 
 static size_t	checklen(char const *s1, char const *set);
 
+//The function checks the access rights
 void	check_command_access(char **param, t_fd fd)
 {
 	char	*command;
@@ -29,6 +30,7 @@ void	check_command_access(char **param, t_fd fd)
 	}
 }
 
+//The function checks if provided link is a directory
 int	is_directory(char *path, t_fd fd, int fd_pipe, char **param)
 {
 	int		test_fd;
@@ -50,6 +52,7 @@ int	is_directory(char *path, t_fd fd, int fd_pipe, char **param)
 	return (0);
 }
 
+//The function filters out selected symbols from the string provided by user
 char	*str_filter(char *s1, char *set)
 {
 	size_t	newlen;
@@ -74,6 +77,7 @@ char	*str_filter(char *s1, char *set)
 	return (new_s - newlen);
 }
 
+//The function checks if character c is part of the set
 static size_t	checkc(char c, char const *set)
 {
 	while (*set)
@@ -85,6 +89,8 @@ static size_t	checkc(char c, char const *set)
 	return (0);
 }
 
+//The function calculates the length of a new string
+//formed as a result of filtering out the characters from the set
 static size_t	checklen(char const *s1, char const *set)
 {
 	size_t	i;

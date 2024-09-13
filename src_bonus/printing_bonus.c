@@ -12,6 +12,8 @@
 
 #include "../inc_bonus/pipex_bonus.h"
 
+//The function prints an error message with needed format ("pipex: ")
+//to selected file descriptor
 void	printing(char *cmd, char *result, int fd)
 {
 	ft_putstr_fd("pipex: ", fd);
@@ -19,6 +21,8 @@ void	printing(char *cmd, char *result, int fd)
 	ft_putstr_fd(result, fd);
 }
 
+//The function prints an error message without the program name
+//to selected file descriptor
 void	printing_nop(char *cmd, char *result, int fd)
 {
 	ft_putstr_fd(cmd, fd);

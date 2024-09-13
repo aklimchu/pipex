@@ -18,6 +18,7 @@ static int	open_dest_file(char *argv, int pipe[2]);
 
 static void	path_and_exec(char	**param_2, char **envp);
 
+//The function creates the fork and then enters the second child process
 int	fork_2(char **argv, char **envp, t_fd *fd)
 {
 	fd->p2 = fork();
@@ -33,6 +34,7 @@ int	fork_2(char **argv, char **envp, t_fd *fd)
 	return (0);
 }
 
+//Child process where user command is called from argv[3]
 static void	child_process(char **argv, char **envp, t_fd fd)
 {
 	char	**param_2;
@@ -53,6 +55,8 @@ static void	child_process(char **argv, char **envp, t_fd fd)
 	path_and_exec(param_2, envp);
 }
 
+//The function opens the the destination file and return
+//a file descriptor to it
 static int	open_dest_file(char *str, int pipe[2])
 {
 	int		fd_write;
@@ -78,6 +82,7 @@ static int	open_dest_file(char *str, int pipe[2])
 	return (fd_write);
 }
 
+//The function finds a path to user command and execute it
 static void	path_and_exec(char	**param_2, char **envp)
 {
 	char	*path_2;

@@ -12,6 +12,7 @@
 
 #include "../inc/pipex.h"
 
+//The function returns a new string formed my joined 3 strings provided by user
 char	*ft_strjoin_new(char const *s1, char const *s2, char const *s3)
 {
 	char	*new_s;

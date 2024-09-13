@@ -16,6 +16,7 @@ static void	dup_tools(t_fd fd);
 
 static int	open_dest_file(char *str, int pipe[2], t_fd fd);
 
+//The function creates the fork and then enter the last child process
 int	last_fork(t_fd *fd, char *argv[], char *envp[], int i)
 {
 	fd->pid[i] = fork();
@@ -30,6 +31,7 @@ int	last_fork(t_fd *fd, char *argv[], char *envp[], int i)
 	return (0);
 }
 
+//Child process where user command is called from the last user command
 void	last_process(char **argv, char **envp, t_fd fd, int i)
 {
 	char	*path_2;
@@ -59,6 +61,7 @@ void	last_process(char **argv, char **envp, t_fd fd, int i)
 	}
 }
 
+//Helper function duplucates file descriptor of destination file to stdout
 static void	dup_tools(t_fd fd)
 {
 	if (dup2(fd.out, 1) == -1)
@@ -69,6 +72,8 @@ static void	dup_tools(t_fd fd)
 	}
 }
 
+//The function opens the the destination file and returns
+//a file descriptor to it
 static int	open_dest_file(char *str, int pipe[2], t_fd fd)
 {
 	int		fd_write;

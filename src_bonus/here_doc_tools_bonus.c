@@ -12,6 +12,7 @@
 
 #include "../inc_bonus/pipex_bonus.h"
 
+//The function searches for a character c in the string s
 size_t	ft_strchr_fix(const char *s, int c)
 {
 	char	new_c;
@@ -29,6 +30,7 @@ size_t	ft_strchr_fix(const char *s, int c)
 	return (0);
 }
 
+//The function frees selected strings
 int	free_str(char *str1, char *str2)
 {
 	if (str1)

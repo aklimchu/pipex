@@ -18,6 +18,8 @@ static char	**get_path(char *envp[]);
 
 static char	*get_full_path(char **path, char *command, char **param, t_fd fd);
 
+//The function returns a two-dimentional string with the name of 
+//user command and its parametres
 char	**check_param(char *str, t_fd fd)
 {
 	char	*str_new;
@@ -46,6 +48,7 @@ char	**check_param(char *str, t_fd fd)
 	return (param);
 }
 
+//The function looks for system path to the user command
 char	*check_path(char *envp[], char **param, t_fd fd)
 {
 	char	*full_path;
@@ -70,6 +73,7 @@ char	*check_path(char *envp[], char **param, t_fd fd)
 	return (full_path);
 }
 
+//Helper function to set the characters that are filtered later
 static void	set_value(char set[3], char *str)
 {
 	if (str[0] == '\0' || str[0] == ' ')
@@ -82,6 +86,7 @@ static void	set_value(char set[3], char *str)
 	set[2] = '\0';
 }
 
+//The function finds the "PATH" part from envp
 static char	**get_path(char *envp[])
 {
 	int		i;
@@ -103,6 +108,7 @@ static char	**get_path(char *envp[])
 	return (path);
 }
 
+//The function checks in which of the system paths user command is located
 static char	*get_full_path(char **path, char *command, char **param, t_fd fd)
 {
 	char	*full_path;

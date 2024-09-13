@@ -12,19 +12,34 @@
 
 #include "../inc/pipex.h"
 
-static int	word_count(char *str);
-
+//The function returns the number of parameters contained in the
+//user input along with the command name
 int	count_param(char *str)
 {
-	int		i;
-
-	i = 2;
+	int		count;
+	int		flag;
+	
 	if (ft_strnstr(str, "grep", 4) && ft_strnstr(str, "-", 6) == 0)
-		return (i);
+		return (2);
 	else
-		return (word_count(str));
+	{
+		count = 1;
+		flag = 0;
+		while (*str)
+		{
+			if (*str == '{')
+				flag = 1;
+			if (*str == '}')
+				flag = 0;
+			if (*str == ' ' && *(str + 1) != ' ' && flag == 0)
+				count++;
+			str++;
+		}
+	}
+	return (count);
 }
 
+//The function checks the access rights
 void	check_command_access(char **param)
 {
 	char	*command;
@@ -38,6 +53,7 @@ void	check_command_access(char **param)
 	}
 }
 
+//The function frees selected memory
 void	free_all(char **arr_1, char **arr_2, char *str)
 {
 	int		i;
@@ -65,6 +81,8 @@ void	free_all(char **arr_1, char **arr_2, char *str)
 	}
 }
 
+//The function closes selected file descriptors and frees
+//the array of pids
 void	close_fds(int fd1, int fd2, int fd3)
 {
 	if (fd1 >= 0)
@@ -73,24 +91,4 @@ void	close_fds(int fd1, int fd2, int fd3)
 		close(fd2);
 	if (fd3 >= 0)
 		close(fd3);
-}
-
-static int	word_count(char *str)
-{
-	int		count;
-	int		flag;
-
-	count = 1;
-	flag = 0;
-	while (*str)
-	{
-		if (*str == '{')
-			flag = 1;
-		if (*str == '}')
-			flag = 0;
-		if (*str == ' ' && *(str + 1) != ' ' && flag == 0)
-			count++;
-		str++;
-	}
-	return (count);
 }
